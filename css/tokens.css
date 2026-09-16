@@ -23,7 +23,11 @@
   --exito: #1E6B26; /* 6.59:1 sobre blanco · 5.76:1 sobre --exito-sua */
   --advertencia: #945200; /* 6.06:1 sobre blanco · 5.34:1 sobre --advertencia-sua */
   --error: #B3261E; /* 6.54:1 sobre blanco · 5.36:1 sobre --error-sua */
+  --error-oscura: #8F1D18; /* hover de acciones peligrosas */
   --info: #15506B; /* 8.78:1 sobre blanco · 7.44:1 sobre --info-sua */
+
+  /* Fondo semi-transparente del modal (capa que oscurece la página) */
+  --fondo-modal: rgba(26, 26, 26, 0.5);
 
   /* Fondos suaves para las etiquetas semánticas (texto del estado en el matiz oscuro) */
   --exito-sua: #E7F3E4;

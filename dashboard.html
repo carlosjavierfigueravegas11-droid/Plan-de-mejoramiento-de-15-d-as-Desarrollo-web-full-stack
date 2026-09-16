@@ -6,9 +6,10 @@
     <title>Tablero — ISoT</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body>
-    <header class="encabezado">
+<body class="panel">
+    <header class="encabezado barra">
         <div class="encabezado-marca">
+            <button type="button" class="boton-menu" id="boton-menu" aria-controls="menu-lateral" aria-expanded="false">Menú</button>
             <img src="assets/img/logo.svg" alt="Logo de ISoT" width="64">
             <p class="nombre-sitio">ISoT — Panel de gestión</p>
         </div>
@@ -18,20 +19,21 @@
         </div>
     </header>
 
-    <nav aria-label="Menú principal">
-        <ul>
-            <li><a href="dashboard.html" class="activo">Tablero</a></li>
-            <li><a href="productos.html">Productos</a></li>
-            <li><a href="categorias.html">Categorías</a></li>
-            <li><a href="clientes.html">Clientes</a></li>
-            <li><a href="pedidos.html">Pedidos</a></li>
-            <li><a href="reportes.html">Reportes</a></li>
-        </ul>
-    </nav>
+    <aside class="menu" id="menu-lateral">
+        <nav aria-label="Menú principal">
+            <ul>
+                <li><a href="dashboard.html" class="activo">Tablero</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="categorias.html">Categorías</a></li>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="pedidos.html">Pedidos</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+            </ul>
+        </nav>
+    </aside>
 
-    <main>
+    <main class="contenido">
         <h1>Resumen general</h1>
-        <p class="texto-tenue">Periodo: septiembre de 2026</p>
 
         <section class="indicadores">
             <h2>Indicadores del mes</h2>

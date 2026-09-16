@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Componentes — ISoT</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body class="panel">
+    <header class="encabezado barra">
+        <div class="encabezado-marca">
+            <button type="button" class="boton-menu" id="boton-menu" aria-controls="menu-lateral" aria-expanded="false">Menú</button>
+            <img src="assets/img/logo.svg" alt="Logo de ISoT" width="64">
+            <p class="nombre-sitio">ISoT — Guía de componentes</p>
+        </div>
+        <div class="usuario">
+            <span>J. Zambrano · Administrador</span>
+            <a href="login.html">Cerrar sesión</a>
+        </div>
+    </header>
+
+    <aside class="menu" id="menu-lateral">
+        <nav aria-label="Menú principal">
+            <ul>
+                <li><a href="dashboard.html">Tablero</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="componentes.html" class="activo">Componentes</a></li>
+                <li><a href="categorias.html">Categorías</a></li>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="pedidos.html">Pedidos</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="contenido">
+        <h1>Guía de componentes</h1>
+        <p class="texto-tenue">Biblioteca de interfaz del sistema. Todo componente interactivo debe documentar sus cinco estados: normal, :hover, :focus-visible, activo y deshabilitado.</p>
+
+        <section class="seccion-componente">
+            <h2>Escala tipográfica</h2>
+            <p class="demo-t1">--t-1 · 0.875rem — texto pequeño y tenue</p>
+            <p class="demo-t2">--t-2 · 1rem — base del sistema</p>
+            <p class="demo-t3">--t-3 · 1.25rem — encabezado de sección</p>
+            <p class="demo-t4">--t-4 · 1.5rem — subtítulo o valor destacado</p>
+            <p class="demo-t5">--t-5 · 1.9rem — encabezado de página (h1)</p>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Paleta de color (tokens)</h2>
+            <div class="paleta">
+                <div class="muestra">
+                    <div class="muestra-color muestra--superficie"></div>
+                    <p>--superficie<br>#FAF9F4</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--superficie-alta"></div>
+                    <p>--superficie-alta<br>#FFFFFF</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--marca"></div>
+                    <p>--color-marca<br>#1A1A1A</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--marca-sua"></div>
+                    <p>--color-marca-sua<br>#FFF3C4</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--accion"></div>
+                    <p>--color-accion<br>#F7C52A</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--accion-oscura"></div>
+                    <p>--color-accion-oscura<br>#DFAB00</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--acento"></div>
+                    <p>--color-acento<br>#7A5400</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--texto"></div>
+                    <p>--texto<br>#1A1A1A</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--texto-tenue"></div>
+                    <p>--texto-tenue<br>#4D4D4D</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--exito"></div>
+                    <p>--exito<br>#1E6B26</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--advertencia"></div>
+                    <p>--advertencia<br>#945200</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--error"></div>
+                    <p>--error<br>#B3261E</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--info"></div>
+                    <p>--info<br>#15506B</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Botones</h2>
+
+            <p class="demo-etiqueta">Primario (acción principal)</p>
+            <div class="demo-grupo">
+                <button type="button" class="boton">Guardar cambios</button>
+                <button type="button" class="boton boton--activo">Activo</button>
+                <button type="button" class="boton" disabled>Deshabilitado</button>
+            </div>
+
+            <p class="demo-etiqueta">Secundario</p>
+            <div class="demo-grupo">
+                <button type="button" class="boton boton--secundario">Cancelar</button>
+                <button type="button" class="boton boton--secundario boton--activo">Activo</button>
+                <button type="button" class="boton boton--secundario" disabled>Deshabilitado</button>
+            </div>
+
+            <p class="demo-etiqueta">Peligro</p>
+            <div class="demo-grupo">
+                <button type="button" class="boton boton--peligro">Eliminar</button>
+                <button type="button" class="boton boton--peligro boton--activo">Activo</button>
+                <button type="button" class="boton boton--peligro" disabled>Deshabilitado</button>
+            </div>
+
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>:hover (cursor encima)</li>
+                <li>:focus-visible (tecla Tab)</li>
+                <li>activo (pulsado/seleccionado)</li>
+                <li>deshabilitado (disabled)</li>
+            </ul>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Campos de formulario</h2>
+
+            <p class="demo-etiqueta">Normal</p>
+            <div class="demo-grupo">
+                <div class="campo">
+                    <label for="demo-correo">Correo electrónico</label>
+                    <input type="email" id="demo-correo" name="demo-correo" value="j.zambrano@zdtechlab.co">
+                </div>
+            </div>
+
+            <p class="demo-etiqueta">Con error (aria-invalid)</p>
+            <div class="demo-grupo">
+                <div class="campo">
+                    <label for="demo-correo-error">Correo electrónico</label>
+                    <input type="email" id="demo-correo-error" name="demo-correo-error" value="correo@dominio.com" class="invalid" aria-invalid="true" aria-describedby="error-correo">
+                    <p class="mensaje-error" id="error-correo">El correo no tiene un formato válido.</p>
+                </div>
+            </div>
+
+            <p class="demo-etiqueta">Deshabilitado</p>
+            <div class="demo-grupo">
+                <div class="campo">
+                    <label for="demo-campo-deshabilitado">Campo bloqueado</label>
+                    <input type="text" id="demo-campo-deshabilitado" name="demo-campo-deshabilitado" value="No editable" disabled>
+                </div>
+            </div>
+
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>:hover</li>
+                <li>:focus-visible</li>
+                <li>activo (con valor / error)</li>
+                <li>deshabilitado</li>
+            </ul>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Tarjeta de indicador</h2>
+            <div class="demo-grupo">
+                <article class="indicador indicador--advertencia">
+                    <h3>Stock crítico</h3>
+                    <p>9</p>
+                </article>
+                <article class="indicador indicador--exito">
+                    <h3>Productos activos</h3>
+                    <p>128</p>
+                </article>
+            </div>
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>:hover (sobre la tarjeta)</li>
+                <li>:focus-visible (si contiene enlace)</li>
+                <li>activo (semántica del valor)</li>
+                <li>constante · no deshabilitable</li>
+            </ul>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Tabla de datos</h2>
+            <div class="listado">
+                <table>
+                    <caption>Productos registrados en el inventario</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Categoría</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Stock</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" data-label="Nombre">Teclado mecánico RGB</th>
+                            <td data-label="Categoría">Periféricos</td>
+                            <td data-label="Precio">$ 120.000</td>
+                            <td data-label="Stock">14</td>
+                            <td data-label="Acciones"><a href="productos.html">Editar</a> · <a href="productos.html">Eliminar</a></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" data-label="Nombre">Monitor 24" Full HD</th>
+                            <td data-label="Categoría">Pantallas</td>
+                            <td data-label="Precio">$ 680.000</td>
+                            <td data-label="Stock">7</td>
+                            <td data-label="Acciones"><a href="productos.html">Editar</a> · <a href="productos.html">Eliminar</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>:hover (fila)</li>
+                <li>:focus-visible (enlace de acción)</li>
+                <li>activo (encabezado de columna)</li>
+                <li>constante · no deshabilitable</li>
+            </ul>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Mensajes de alerta</h2>
+            <div class="demo-grupo">
+                <div class="alerta alerta--exito"><strong>Éxito:</strong> registro guardado correctamente.</div>
+            </div>
+            <div class="demo-grupo">
+                <div class="alerta alerta--advertencia"><strong>Advertencia:</strong> hay productos con stock bajo.</div>
+            </div>
+            <div class="demo-grupo">
+                <div class="alerta alerta--error"><strong>Error:</strong> credenciales inválidas.</div>
+            </div>
+            <div class="demo-grupo">
+                <div class="alerta alerta--info"><strong>Información:</strong> sesión activa.</div>
+            </div>
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>constante · no aplica Interacción</li>
+            </ul>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Ventana modal</h2>
+            <div class="demo-fondo">
+                <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+                    <h2 id="modal-titulo">Confirmar eliminación</h2>
+                    <p>Esta acción no se puede deshacer. El producto desaparecerá del listado.</p>
+                    <div class="demo-grupo">
+                        <button type="button" class="boton boton--peligro">Eliminar</button>
+                        <button type="button" class="boton boton--secundario">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>:focus-visible (botones dentro)</li>
+                <li>:hover (botones)</li>
+                <li>activo (confirmación)</li>
+                <li>deshabilitado (botón Eliminar en proceso)</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="pie">
+        <p>ISoT — Sistema de gestión. © 2026</p>
+    </footer>
+</body>
+</html>
