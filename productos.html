@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Productos — ISoT</title>
+    <link rel="stylesheet" href="css/tokens.css">
+</head>
+<body>
+    <header class="encabezado">
+        <img src="assets/img/logo.svg" alt="Logo de ISoT" width="90">
+        <p class="nombre-sitio">ISoT — Panel de gestión</p>
+    </header>
+
+    <nav aria-label="Menú principal">
+        <ul>
+            <li><a href="dashboard.html">Tablero</a></li>
+            <li><a href="productos.html">Productos</a></li>
+            <li><a href="categorias.html">Categorías</a></li>
+            <li><a href="clientes.html">Clientes</a></li>
+            <li><a href="pedidos.html">Pedidos</a></li>
+            <li><a href="reportes.html">Reportes</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>Productos</h1>
+
+        <section class="listado">
+            <h2>Listado de productos</h2>
+            <table>
+                <caption>Productos registrados en el inventario</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Categoría</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Teclado mecánico RGB</th>
+                        <td>Periféricos</td>
+                        <td>$ 120.000</td>
+                        <td>14</td>
+                        <td><a href="productos.html">Editar</a> · <a href="productos.html">Eliminar</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Monitor 24" Full HD</th>
+                        <td>Pantallas</td>
+                        <td>$ 680.000</td>
+                        <td>7</td>
+                        <td><a href="productos.html">Editar</a> · <a href="productos.html">Eliminar</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">SSD NVMe 512 GB</th>
+                        <td>Almacenamiento</td>
+                        <td>$ 240.000</td>
+                        <td>30</td>
+                        <td><a href="productos.html">Editar</a> · <a href="productos.html">Eliminar</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="formulario">
+            <h2>Registro de producto</h2>
+            <form action="productos.php" method="post" novalidate>
+                <fieldset>
+                    <legend>Datos del producto</legend>
+
+                    <label for="nombre">Nombre del producto</label>
+                    <input type="text" id="nombre" name="nombre" required minlength="3">
+
+                    <label for="categoria">Categoría</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="">Seleccione una categoría</option>
+                        <option value="perifericos">Periféricos</option>
+                        <option value="pantallas">Pantallas</option>
+                        <option value="almacenamiento">Almacenamiento</option>
+                        <option value="redes">Redes</option>
+                    </select>
+
+                    <label for="precio">Precio</label>
+                    <input type="number" id="precio" name="precio" required min="0" step="0.01">
+
+                    <label for="stock">Stock</label>
+                    <input type="number" id="stock" name="stock" required min="0" step="1">
+                </fieldset>
+                <button type="submit">Guardar producto</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="pie">
+        <p>ISoT — Sistema de gestión. © 2026</p>
+    </footer>
+</body>
+</html>

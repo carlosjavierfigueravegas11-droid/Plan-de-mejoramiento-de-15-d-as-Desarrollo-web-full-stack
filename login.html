@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ingreso — ISoT</title>
+    <link rel="stylesheet" href="css/tokens.css">
+</head>
+<body>
+    <main class="pantalla-ingreso">
+        <img src="assets/img/logo.svg" alt="Logo de ISoT" width="120">
+        <h1>Ingreso al panel de gestión</h1>
+
+        <form action="login.php" method="post" novalidate>
+            <fieldset>
+                <legend>Credenciales</legend>
+
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" name="correo" required autocomplete="username">
+
+                <label for="clave">Contraseña</label>
+                <input type="password" id="clave" name="clave" required autocomplete="current-password" minlength="8">
+            </fieldset>
+            <button type="submit">Iniciar sesión</button>
+        </form>
+    </main>
+</body>
+</html>
