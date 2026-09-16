@@ -1,0 +1,32 @@
+:root {
+  /* Neutros — el 60 % de la pantalla. Base acromática cálida que acompaña el amarillo del logo */
+  --superficie: #FAF9F4;
+  --superficie-alta: #FFFFFF;
+  --borde: #E3DFD3;
+
+  /* Marca — el 30 %. Los dos colores del logo ISoT: el negro de la marca y la tinta clara del amarillo */
+  --color-marca: #1A1A1A;
+  --color-marca-sua: #FFF3C4;
+
+  /* Acción y acento — el 10 %. Un solo matiz saturado (hue 47°): el amarillo del logo */
+  --color-accion: #F7C52A;
+  --color-accion-oscura: #DFAB00;
+  --color-accion-texto: #1A1A1A; /* 10.75:1 sobre el amarillo */
+  --color-acento: #7A5400; /* dorado oscuro del mismo matiz, 6.78:1 sobre blanco */
+
+  /* Texto */
+  --texto: #1A1A1A; /* 16.51:1 sobre --superficie */
+  --texto-tenue: #4D4D4D; /* 8.02:1 sobre --superficie */
+
+  /* Semánticos: color + ícono + texto. Cada matiz cumple AA como texto sobre blanco y sobre su fondo suave */
+  --exito: #1E6B26; /* 6.59:1 sobre blanco · 5.76:1 sobre --exito-sua */
+  --advertencia: #945200; /* 6.06:1 sobre blanco · 5.34:1 sobre --advertencia-sua */
+  --error: #B3261E; /* 6.54:1 sobre blanco · 5.36:1 sobre --error-sua */
+  --info: #15506B; /* 8.78:1 sobre blanco · 7.44:1 sobre --info-sua */
+
+  /* Fondos suaves para las etiquetas semánticas (texto del estado en el matiz oscuro) */
+  --exito-sua: #E7F3E4;
+  --advertencia-sua: #FBEFDF;
+  --error-sua: #F9E4E2;
+  --info-sua: #E3EEF3;
+}
