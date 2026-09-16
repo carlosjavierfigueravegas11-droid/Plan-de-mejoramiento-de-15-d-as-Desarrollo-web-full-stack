@@ -4,25 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ingreso — ISoT</title>
-    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
     <main class="pantalla-ingreso">
-        <img src="assets/img/logo.svg" alt="Logo de ISoT" width="120">
-        <h1>Ingreso al panel de gestión</h1>
+        <section class="marca">
+            <img src="assets/img/logo.svg" alt="Logo de ISoT" width="200">
+            <h1>Panel de gestión</h1>
+            <p>Administra tu inventario, tus ventas y tus reportes en un solo lugar.</p>
+        </section>
 
-        <form action="login.php" method="post" novalidate>
-            <fieldset>
-                <legend>Credenciales</legend>
-
+        <section class="formulario">
+            <h2>Iniciar sesión</h2>
+            <form action="login.php" method="post" novalidate>
                 <label for="correo">Correo electrónico</label>
                 <input type="email" id="correo" name="correo" required autocomplete="username">
 
                 <label for="clave">Contraseña</label>
                 <input type="password" id="clave" name="clave" required autocomplete="current-password" minlength="8">
-            </fieldset>
-            <button type="submit">Iniciar sesión</button>
-        </form>
+
+                <button type="submit">Iniciar sesión</button>
+            </form>
+            <p class="nota">Acceso restringido al equipo del programa.</p>
+        </section>
     </main>
 </body>
 </html>

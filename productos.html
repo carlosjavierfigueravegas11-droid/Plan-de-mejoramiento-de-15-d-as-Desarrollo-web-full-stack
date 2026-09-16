@@ -4,18 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Productos — ISoT</title>
-    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
     <header class="encabezado">
-        <img src="assets/img/logo.svg" alt="Logo de ISoT" width="90">
-        <p class="nombre-sitio">ISoT — Panel de gestión</p>
+        <div class="encabezado-marca">
+            <img src="assets/img/logo.svg" alt="Logo de ISoT" width="64">
+            <p class="nombre-sitio">ISoT — Panel de gestión</p>
+        </div>
+        <div class="usuario">
+            <span>J. Zambrano · Administrador</span>
+            <a href="login.html">Cerrar sesión</a>
+        </div>
     </header>
 
     <nav aria-label="Menú principal">
         <ul>
             <li><a href="dashboard.html">Tablero</a></li>
-            <li><a href="productos.html">Productos</a></li>
+            <li><a href="productos.html" class="activo">Productos</a></li>
             <li><a href="categorias.html">Categorías</a></li>
             <li><a href="clientes.html">Clientes</a></li>
             <li><a href="pedidos.html">Pedidos</a></li>

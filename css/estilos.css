@@ -1,0 +1,265 @@
+@import url('tokens.css');
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Escala tipográfica de cinco tamaños en rem */
+:root {
+  --t-1: 0.875rem; /* texto pequeño / tenue */
+  --t-2: 1rem;     /* base */
+  --t-3: 1.25rem;  /* encabezados de sección */
+  --t-4: 1.5rem;   /* h2 / valores destacados */
+  --t-5: 1.9rem;   /* h1 */
+}
+
+html { font-size: 16px; }
+
+body {
+  margin: 0;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  font-size: var(--t-2);
+  line-height: 1.6;
+  color: var(--texto);
+  background: var(--superficie);
+}
+
+h1 { font-size: var(--t-5); line-height: 1.2; margin: 0 0 0.5rem; }
+h2 { font-size: var(--t-4); line-height: 1.3; margin: 1.2rem 0 0.5rem; }
+h3 { font-size: var(--t-3); line-height: 1.3; margin: 1rem 0 0.4rem; }
+p { max-width: 70ch; }
+.texto-tenue, small { font-size: var(--t-1); color: var(--texto-tenue); }
+
+/* Enlaces: todos usan variables, sin valores sueltos */
+a { color: var(--color-acento); }
+a:hover { color: var(--color-marca); }
+
+/* Estado de foco visible: soporte de teclado, obligatorio (WCAG 2.4.7) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-acento);
+  outline-offset: 2px;
+}
+
+/* Encabezado y navegación */
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1.5rem;
+  background: var(--superficie-oscura);
+  color: var(--superficie-alta);
+}
+.encabezado-marca { display: flex; align-items: center; gap: 0.8rem; }
+.nombre-sitio { margin: 0; font-weight: 600; }
+.encabezado .usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-size: var(--t-1);
+}
+.encabezado .usuario a {
+  color: var(--superficie-alta);
+  text-decoration: none;
+  font-weight: 500;
+}
+.encabezado .usuario a:hover { color: var(--color-marca-sua); }
+
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0.5rem 1.5rem;
+  background: var(--superficie-alta);
+  border-bottom: 1px solid var(--borde);
+}
+nav a {
+  display: block;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  color: var(--texto);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: var(--t-2);
+}
+nav a:hover { background: var(--color-marca-sua); color: var(--color-marca); }
+nav a.activo {
+  background: var(--color-accion);
+  color: var(--color-accion-texto);
+  font-weight: 600;
+}
+
+main { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
+
+/* Pantalla de ingreso (login.html): dos paneles, marca a la izquierda y formulario a la derecha */
+.pantalla-ingreso {
+  min-height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  background: var(--color-marca);
+}
+
+.pantalla-ingreso .marca {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: 4rem;
+  background: var(--color-marca);
+  color: var(--superficie-alta);
+}
+.pantalla-ingreso .marca h1 { color: var(--superficie-alta); margin: 0; }
+.pantalla-ingreso .marca p { color: var(--color-marca-sua); max-width: 40ch; margin: 0; }
+
+.pantalla-ingreso .formulario {
+  flex: 1 1 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem;
+  background: var(--superficie-alta);
+}
+.pantalla-ingreso .formulario h2 {
+  font-size: var(--t-5);
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  color: var(--texto);
+}
+.pantalla-ingreso form { max-width: 340px; }
+.pantalla-ingreso button { width: 100%; }
+.pantalla-ingreso .nota {
+  font-size: var(--t-1);
+  color: var(--texto-tenue);
+  margin: 1.4rem 0 0;
+}
+
+@media (max-width: 820px) {
+  .pantalla-ingreso { flex-direction: column; }
+  .pantalla-ingreso .marca,
+  .pantalla-ingreso .formulario { padding: 2.5rem; }
+  .pantalla-ingreso .marca { align-items: center; text-align: center; }
+}
+
+/* Formularios */
+form fieldset {
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  margin: 0 0 1.2rem;
+  padding: 0.9rem 1.2rem 1.2rem;
+}
+form legend {
+  padding: 0 0.4rem;
+  font-weight: 600;
+  color: var(--color-marca);
+}
+label { display: block; margin: 0.8rem 0 0.25rem; font-weight: 500; font-size: var(--t-1); }
+input, select {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  font-size: var(--t-2);
+  color: var(--texto);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+}
+input:focus-visible, select:focus-visible { outline: 3px solid var(--color-acento); outline-offset: 2px; }
+
+/* Botones: los colores siempre vienen de los tokens del día 2 */
+button, .boton {
+  background: var(--color-accion);
+  color: var(--color-accion-texto);
+  border: none;
+  padding: 0.7rem 1.4rem;
+  font-size: var(--t-2);
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+button:hover, .boton:hover { background: var(--color-accion-oscura); }
+button:focus-visible, .boton:focus-visible { outline: 3px solid var(--color-acento); outline-offset: 2px; }
+
+/* Indicadores del tablero */
+.indicadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.indicadores h2 {
+  grid-column: 1 / -1;
+  font-size: var(--t-3);
+  color: var(--texto-tenue);
+}
+.indicador {
+  background: var(--superficie-alta);
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--color-accion-oscura);
+  border-radius: 8px;
+  padding: 1.1rem 1.2rem;
+}
+.indicador h3 { margin: 0 0 0.25rem; color: var(--texto-tenue); font-size: var(--t-1); font-weight: 600; }
+.indicador p { margin: 0; font-size: var(--t-4); font-weight: 700; }
+.indicador--exito { border-left-color: var(--exito); }
+.indicador--informativo { border-left-color: var(--info); }
+.indicador--advertencia { border-left-color: var(--advertencia); }
+
+/* Tabla de productos del día 3 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--superficie-alta);
+}
+caption {
+  caption-side: top;
+  text-align: left;
+  font-size: var(--t-3);
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+  color: var(--color-marca);
+}
+thead th {
+  background: var(--color-marca);
+  color: var(--superficie-alta);
+  text-align: left;
+  padding: 0.65rem 0.8rem;
+}
+tbody td, tbody th {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--borde);
+  text-align: left;
+}
+tbody tr:nth-child(even) { background: var(--color-marca-sua); }
+tbody tr:hover { background: var(--info-sua); }
+
+.pie {
+  padding: 0.8rem 1.5rem;
+  color: var(--texto-tenue);
+  font-size: var(--t-1);
+  background: var(--superficie-alta);
+  border-top: 1px solid var(--borde);
+}
+
+/* Paneles de listado y formulario (productos.html) */
+.listado, .formulario {
+  background: var(--superficie-alta);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 1.2rem 1.4rem;
+  margin-top: 1.2rem;
+}
+.listado h2, .formulario h2 {
+  font-size: var(--t-3);
+  color: var(--color-marca);
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--borde);
+}
+.formulario form { max-width: 480px; }
+.formulario fieldset { margin: 0 0 1rem; }

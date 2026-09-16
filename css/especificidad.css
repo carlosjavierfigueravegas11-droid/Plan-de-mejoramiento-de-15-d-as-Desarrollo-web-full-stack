@@ -1,0 +1,44 @@
+@import url('tokens.css');
+
+/* Reglas en conflicto sobre el mismo párrafo.
+   Se leen como (identificadores - clases - elementos). Gana el mayor valor;
+   a igual valor, gana la última escrita. */
+
+/* (0 - 0 - 1) */
+p { color: var(--info); }
+
+/* (0 - 1 - 1) */
+.tarjeta p { color: var(--exito); }
+
+/* (0 - 2 - 1) */
+.panel .tarjeta p { color: var(--advertencia); }
+
+/* (1 - 1 - 1) → gana */
+#menu .tarjeta p { color: var(--error); }
+
+/*
+   PREDICCIÓN ESCRITA (antes de abrir el navegador):
+   El párrafo quedará COLOR DE ERROR (#B3261E, rojo).
+   Motivo: la regla #menu .tarjeta p tiene especificidad (1 - 1 - 1),
+   mayor que (0 - 2 - 1) de .panel .tarjeta p, que es la segunda candidata.
+   Ninguna usa !important, así que la cascada normal decide y no hay empate.
+*/
+
+body {
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  color: var(--texto);
+  background: var(--superficie);
+  padding: 2rem;
+}
+
+.panel {
+  padding: 1rem;
+  background: var(--superficie-alta);
+  border: 1px solid var(--borde);
+}
+
+.tarjeta {
+  padding: 1rem;
+  border: 1px dashed var(--borde);
+  width: max-content;
+}

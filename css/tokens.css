@@ -3,6 +3,7 @@
   --superficie: #FAF9F4;
   --superficie-alta: #FFFFFF;
   --borde: #E3DFD3;
+  --superficie-oscura: #333333; /* barra superior / superficies oscuras; texto blanco 12.63:1 */
 
   /* Marca — el 30 %. Los dos colores del logo ISoT: el negro de la marca y la tinta clara del amarillo */
   --color-marca: #1A1A1A;
