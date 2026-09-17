@@ -1,0 +1,45 @@
+1. Producto más caro: Monitor 27" 2K $ 1.150.000
+2. Total de unidades por categoría: {
+  "Periféricos": 120,
+  "Pantallas": 7,
+  "Almacenamiento": 42,
+  "Audio": 37,
+  "Redes": 11
+}
+3. Productos con stock menor a cinco:
+┌─ nombre · categoria · stock · precio
+Teclado mecánico RGB · Periféricos · 4 · $ 120.000
+Switch 8 puertos · Redes · 3 · $ 140.000
+Monitor 27" 2K · Pantallas · 0 · $ 1.150.000
+Disco duro 1 TB · Almacenamiento · 4 · $ 190.000
+UPS 650 VA · Redes · 2 · $ 380.000
+4. Promedio de precio: $ 259.063
+Bono — valor del inventario disponible: $ 27.290.000
+Productos de prueba:
+┌─ id · nombre · categoria · precio · stock
+1 · Teclado mecánico RGB · Periféricos · 120000 · 4
+2 · Mouse inalámbrico · Periféricos · 65000 · 32
+3 · Monitor 24" Full HD · Pantallas · 680000 · 7
+4 · SSD NVMe 512 GB · Almacenamiento · 240000 · 30
+5 · Audífonos Bluetooth · Audio · 150000 · 12
+6 · Cámara web 1080p · Periféricos · 180000 · 9
+7 · Router WiFi 6 · Redes · 320000 · 6
+8 · Switch 8 puertos · Redes · 140000 · 3
+9 · Auriculares con cable · Audio · 45000 · 20
+10 · Monitor 27" 2K · Pantallas · 1150000 · 0
+11 · Disco duro 1 TB · Almacenamiento · 190000 · 4
+12 · Cable HDMI 2 m · Periféricos · 25000 · 60
+13 · Teclado básico · Periféricos · 40000 · 15
+14 · SSD SATA 240 GB · Almacenamiento · 130000 · 8
+15 · UPS 650 VA · Redes · 380000 · 2
+16 · Micrófono condensador · Audio · 290000 · 5
+Pedidos de prueba:
+┌─ id · fecha · cliente · estado · total
+1 · 2026-09-02 · Laura Gómez · entregado · 1325000
+2 · 2026-09-03 · Andrés Pérez · entregado · 1300000
+3 · 2026-09-04 · María Torres · enviado · 240000
+4 · 2026-09-05 · Carlos Ruiz · cancelado · 380000
+5 · 2026-09-06 · Laura Gómez · enviado · 150000
+6 · 2026-09-08 · Lina Castro · entregado · 1150000
+7 · 2026-09-09 · Pedro Mora · entregado · 510000
+8 · 2026-09-10 · Andrés Pérez · enviado · 290000
