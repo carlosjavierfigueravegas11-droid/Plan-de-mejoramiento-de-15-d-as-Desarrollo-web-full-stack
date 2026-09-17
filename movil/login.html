@@ -1,4 +1,48 @@
-@import url('tokens.css');
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ingreso — ISoT</title>
+    <style>
+:root {
+  /* Neutros — el 60 % de la pantalla. Base acromática cálida que acompaña el amarillo del logo */
+  --superficie: #FAF9F4;
+  --superficie-alta: #FFFFFF;
+  --borde: #E3DFD3;
+  --superficie-oscura: #333333; /* barra superior / superficies oscuras; texto blanco 12.63:1 */
+
+  /* Marca — el 30 %. Los dos colores del logo ISoT: el negro de la marca y la tinta clara del amarillo */
+  --color-marca: #1A1A1A;
+  --color-marca-sua: #FFF3C4;
+
+  /* Acción y acento — el 10 %. Un solo matiz saturado (hue 47°): el amarillo del logo */
+  --color-accion: #F7C52A;
+  --color-accion-oscura: #DFAB00;
+  --color-accion-texto: #1A1A1A; /* 10.75:1 sobre el amarillo */
+  --color-acento: #7A5400; /* dorado oscuro del mismo matiz, 6.78:1 sobre blanco */
+
+  /* Texto */
+  --texto: #1A1A1A; /* 16.51:1 sobre --superficie */
+  --texto-tenue: #4D4D4D; /* 8.02:1 sobre --superficie */
+
+  /* Semánticos: color + ícono + texto. Cada matiz cumple AA como texto sobre blanco y sobre su fondo suave */
+  --exito: #1E6B26; /* 6.59:1 sobre blanco · 5.76:1 sobre --exito-sua */
+  --advertencia: #945200; /* 6.06:1 sobre blanco · 5.34:1 sobre --advertencia-sua */
+  --error: #B3261E; /* 6.54:1 sobre blanco · 5.36:1 sobre --error-sua */
+  --error-oscura: #8F1D18; /* hover de acciones peligrosas */
+  --info: #15506B; /* 8.78:1 sobre blanco · 7.44:1 sobre --info-sua */
+
+  /* Fondo semi-transparente del modal (capa que oscurece la página) */
+  --fondo-modal: rgba(26, 26, 26, 0.5);
+
+  /* Fondos suaves para las etiquetas semánticas (texto del estado en el matiz oscuro) */
+  --exito-sua: #E7F3E4;
+  --advertencia-sua: #FBEFDF;
+  --error-sua: #F9E4E2;
+  --info-sua: #E3EEF3;
+}
+
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -544,3 +588,31 @@ input:disabled, select:disabled {
 .demo-t3 { font-size: var(--t-3); }
 .demo-t4 { font-size: var(--t-4); }
 .demo-t5 { font-size: var(--t-5); }
+</style>
+</head>
+<body>
+    <main class="pantalla-ingreso">
+        <section class="marca">
+            <svg viewBox="0 0 320 110" width="200" role="img" aria-label="Logo de ISoT"><text x="10" y="90" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="96" letter-spacing="-3">
+    <tspan fill="#1A1A1A">IS</tspan><tspan fill="#F7C52A">o</tspan><tspan fill="#1A1A1A">T</tspan>
+  </text></svg>
+            <h1>Panel de gestión</h1>
+            <p>Administra tu inventario, tus ventas y tus reportes en un solo lugar.</p>
+        </section>
+
+        <section class="formulario">
+            <h2>Iniciar sesión</h2>
+            <form action="login.php" method="post" novalidate>
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" name="correo" required autocomplete="username">
+
+                <label for="clave">Contraseña</label>
+                <input type="password" id="clave" name="clave" required autocomplete="current-password" minlength="8">
+
+                <button type="submit">Iniciar sesión</button>
+            </form>
+            <p class="nota">Acceso restringido al equipo del programa.</p>
+        </section>
+    </main>
+</body>
+</html>

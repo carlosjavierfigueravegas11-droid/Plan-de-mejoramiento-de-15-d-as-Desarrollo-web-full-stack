@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Componentes — ISoT</title>
+    <style>
+:root {
+  /* Neutros — el 60 % de la pantalla. Base acromática cálida que acompaña el amarillo del logo */
+  --superficie: #FAF9F4;
+  --superficie-alta: #FFFFFF;
+  --borde: #E3DFD3;
+  --superficie-oscura: #333333; /* barra superior / superficies oscuras; texto blanco 12.63:1 */
+
+  /* Marca — el 30 %. Los dos colores del logo ISoT: el negro de la marca y la tinta clara del amarillo */
+  --color-marca: #1A1A1A;
+  --color-marca-sua: #FFF3C4;
+
+  /* Acción y acento — el 10 %. Un solo matiz saturado (hue 47°): el amarillo del logo */
+  --color-accion: #F7C52A;
+  --color-accion-oscura: #DFAB00;
+  --color-accion-texto: #1A1A1A; /* 10.75:1 sobre el amarillo */
+  --color-acento: #7A5400; /* dorado oscuro del mismo matiz, 6.78:1 sobre blanco */
+
+  /* Texto */
+  --texto: #1A1A1A; /* 16.51:1 sobre --superficie */
+  --texto-tenue: #4D4D4D; /* 8.02:1 sobre --superficie */
+
+  /* Semánticos: color + ícono + texto. Cada matiz cumple AA como texto sobre blanco y sobre su fondo suave */
+  --exito: #1E6B26; /* 6.59:1 sobre blanco · 5.76:1 sobre --exito-sua */
+  --advertencia: #945200; /* 6.06:1 sobre blanco · 5.34:1 sobre --advertencia-sua */
+  --error: #B3261E; /* 6.54:1 sobre blanco · 5.36:1 sobre --error-sua */
+  --error-oscura: #8F1D18; /* hover de acciones peligrosas */
+  --info: #15506B; /* 8.78:1 sobre blanco · 7.44:1 sobre --info-sua */
+
+  /* Fondo semi-transparente del modal (capa que oscurece la página) */
+  --fondo-modal: rgba(26, 26, 26, 0.5);
+
+  /* Fondos suaves para las etiquetas semánticas (texto del estado en el matiz oscuro) */
+  --exito-sua: #E7F3E4;
+  --advertencia-sua: #FBEFDF;
+  --error-sua: #F9E4E2;
+  --info-sua: #E3EEF3;
+}
+
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Escala tipográfica de cinco tamaños en rem */
+:root {
+  --t-1: 0.875rem; /* texto pequeño / tenue */
+  --t-2: 1rem;     /* base */
+  --t-3: 1.25rem;  /* encabezados de sección */
+  --t-4: 1.5rem;   /* h2 / valores destacados */
+  --t-5: 1.9rem;   /* h1 */
+}
+
+html { font-size: 16px; }
+
+body {
+  margin: 0;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  font-size: var(--t-2);
+  line-height: 1.6;
+  color: var(--texto);
+  background: var(--superficie);
+}
+
+h1 { font-size: var(--t-5); line-height: 1.2; margin: 0 0 0.5rem; }
+h2 { font-size: var(--t-4); line-height: 1.3; margin: 1.2rem 0 0.5rem; }
+h3 { font-size: var(--t-3); line-height: 1.3; margin: 1rem 0 0.4rem; }
+
+/* Las imágenes nunca desbordan su contenedor */
+img { max-width: 100%; height: auto; }
+p { max-width: 70ch; }
+.texto-tenue, small { font-size: var(--t-1); color: var(--texto-tenue); }
+
+/* Enlaces: todos usan variables, sin valores sueltos */
+a { color: var(--color-acento); }
+a:hover { color: var(--color-marca); }
+
+/* Estado de foco visible: soporte de teclado, obligatorio (WCAG 2.4.7) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-acento);
+  outline-offset: 2px;
+}
+
+/* Encabezado y navegación */
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1.5rem;
+  background: var(--superficie-oscura);
+  color: var(--superficie-alta);
+}
+.encabezado-marca { display: flex; align-items: center; gap: 0.8rem; }
+.nombre-sitio { margin: 0; font-weight: 600; }
+.encabezado .usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-size: var(--t-1);
+}
+.encabezado .usuario a {
+  color: var(--superficie-alta);
+  text-decoration: none;
+  font-weight: 500;
+}
+.encabezado .usuario a:hover { color: var(--color-marca-sua); }
+
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0.5rem 1.5rem;
+  background: var(--superficie-alta);
+  border-bottom: 1px solid var(--borde);
+}
+nav a {
+  display: block;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  color: var(--texto);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: var(--t-2);
+}
+nav a:hover { background: var(--color-marca-sua); color: var(--color-marca); }
+nav a.activo {
+  background: var(--color-accion);
+  color: var(--color-accion-texto);
+  font-weight: 600;
+}
+
+/* Día 5-6 — Maquetación del tablero con CSS Grid
+   Base: teléfono (mobile first). Una columna; el menú lateral queda oculto
+   fuera del borde izquierdo y se muestra con la clase .abierto (el día 8 se
+   conecta con JavaScript). */
+.panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "barra"
+    "contenido"
+    "pie";
+  min-height: 100vh;
+  min-height: 100svh;
+}
+.panel .barra {
+  grid-area: barra;
+  z-index: 10;
+}
+.panel .menu {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 240px;
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+  z-index: 15;
+  overflow-y: auto;
+  background: var(--superficie-alta);
+  border-right: 1px solid var(--borde);
+  padding: 1rem 0.8rem;
+}
+.panel .menu.abierto { transform: translateX(0); }
+.panel .menu nav ul {
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border-bottom: none;
+}
+.panel .menu nav a {
+  padding: 0.6rem 0.9rem;
+  font-size: var(--t-2);
+}
+.panel .contenido {
+  grid-area: contenido;
+  max-width: none;
+  margin: 0;
+  padding: 1.2rem 1rem;
+}
+.panel .pie {
+  grid-area: pie;
+}
+
+/* Botón del menú: solo visible en pantallas pequeñas */
+.boton-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  font-size: var(--t-1);
+  font-weight: 600;
+}
+
+/* Escritorio >= 1024 px: dos columnas, menú lateral fijo y visible, y la
+   barra superior pegada arriba cubriendo ambas columnas. El scroll ocurre
+   dentro de .contenido y .menu, no en la página. */
+@media (min-width: 1024px) {
+  .panel {
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "barra barra"
+      "menu contenido"
+      "pie pie";
+    height: 100vh;
+    min-height: 0;
+  }
+  .panel .barra {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .panel .menu {
+    position: static;
+    grid-area: menu;
+    transform: none;
+    overflow-y: auto;
+  }
+  .panel .contenido {
+    padding: 1.5rem 1.8rem;
+    overflow: auto;
+  }
+  .boton-menu { display: none; }
+}
+
+/* Teléfono: la tabla de datos se convierte en tarjetas apiladas */
+@media (max-width: 767px) {
+  .listado table,
+  .listado thead,
+  .listado tbody,
+  .listado tr,
+  .listado th,
+  .listado td { display: block; }
+  .listado thead { display: none; }
+  .listado tbody tr {
+    border: 1px solid var(--borde);
+    border-left: 4px solid var(--color-accion-oscura);
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+  }
+  .listado tbody th,
+  .listado tbody td {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--borde);
+  }
+  .listado tbody th::before,
+  .listado tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--texto-tenue);
+  }
+}
+
+/* Accesibilidad: sin animaciones si el usuario lo solicita */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
+
+main { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
+
+/* Pantalla de ingreso (login.html): dos paneles, marca a la izquierda y formulario a la derecha */
+.pantalla-ingreso {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  background: var(--color-marca);
+}
+
+.pantalla-ingreso .marca {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: 4rem;
+  background: var(--color-marca);
+  color: var(--superficie-alta);
+}
+.pantalla-ingreso .marca h1 { color: var(--superficie-alta); margin: 0; }
+.pantalla-ingreso .marca p { color: var(--color-marca-sua); max-width: 40ch; margin: 0; }
+
+.pantalla-ingreso .formulario {
+  flex: 1 1 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem;
+  background: var(--superficie-alta);
+}
+.pantalla-ingreso .formulario h2 {
+  font-size: var(--t-5);
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  color: var(--texto);
+}
+.pantalla-ingreso form { max-width: 340px; }
+.pantalla-ingreso button { width: 100%; }
+.pantalla-ingreso .nota {
+  font-size: var(--t-1);
+  color: var(--texto-tenue);
+  margin: 1.4rem 0 0;
+}
+
+@media (max-width: 820px) {
+  .pantalla-ingreso { flex-direction: column; }
+  .pantalla-ingreso .marca,
+  .pantalla-ingreso .formulario { padding: 2.5rem; }
+  .pantalla-ingreso .marca { align-items: center; text-align: center; }
+}
+
+/* Teléfonos pequeños: reduce espacios y escala el logo de la pantalla de ingreso */
+@media (max-width: 480px) {
+  .encabezado { flex-wrap: wrap; padding: 0.6rem 1rem; }
+  .encabezado-marca img, .encabezado-marca svg { width: 48px; height: auto; }
+  .pantalla-ingreso .marca,
+  .pantalla-ingreso .formulario { padding: 1.75rem; }
+  .marca img, .marca svg { max-width: 55%; height: auto; }
+}
+
+/* Formularios */
+form fieldset {
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  margin: 0 0 1.2rem;
+  padding: 0.9rem 1.2rem 1.2rem;
+}
+form legend {
+  padding: 0 0.4rem;
+  font-weight: 600;
+  color: var(--color-marca);
+}
+label { display: block; margin: 0.8rem 0 0.25rem; font-weight: 500; font-size: var(--t-1); }
+input, select {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  font-size: var(--t-2);
+  color: var(--texto);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+}
+input:focus-visible, select:focus-visible { outline: 3px solid var(--color-acento); outline-offset: 2px; }
+
+/* Botones: los colores siempre vienen de los tokens del día 2 */
+button, .boton {
+  background: var(--color-accion);
+  color: var(--color-accion-texto);
+  border: none;
+  padding: 0.7rem 1.4rem;
+  font-size: var(--t-2);
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+button:hover, .boton:hover { background: var(--color-accion-oscura); }
+button:focus-visible, .boton:focus-visible { outline: 3px solid var(--color-acento); outline-offset: 2px; }
+
+/* Indicadores del tablero */
+.indicadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.indicadores h2 {
+  grid-column: 1 / -1;
+  font-size: var(--t-3);
+  color: var(--texto-tenue);
+}
+.indicador {
+  background: var(--superficie-alta);
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--color-accion-oscura);
+  border-radius: 8px;
+  padding: 1.1rem 1.2rem;
+}
+.indicador h3 { margin: 0 0 0.25rem; color: var(--texto-tenue); font-size: var(--t-1); font-weight: 600; }
+.indicador p { margin: 0; font-size: var(--t-4); font-weight: 700; }
+.indicador--exito { border-left-color: var(--exito); }
+.indicador--informativo { border-left-color: var(--info); }
+.indicador--advertencia { border-left-color: var(--advertencia); }
+
+/* Tabla de productos del día 3 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--superficie-alta);
+}
+caption {
+  caption-side: top;
+  text-align: left;
+  font-size: var(--t-3);
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+  color: var(--color-marca);
+}
+thead th {
+  background: var(--color-marca);
+  color: var(--superficie-alta);
+  text-align: left;
+  padding: 0.65rem 0.8rem;
+}
+tbody td, tbody th {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--borde);
+  text-align: left;
+}
+tbody tr:nth-child(even) { background: var(--color-marca-sua); }
+tbody tr:hover { background: var(--info-sua); }
+
+.pie {
+  padding: 0.8rem 1.5rem;
+  color: var(--texto-tenue);
+  font-size: var(--t-1);
+  background: var(--superficie-alta);
+  border-top: 1px solid var(--borde);
+}
+
+/* Paneles de listado y formulario (productos.html) */
+.listado, .formulario {
+  background: var(--superficie-alta);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 1.2rem 1.4rem;
+  margin-top: 1.2rem;
+}
+.listado h2, .formulario h2 {
+  font-size: var(--t-3);
+  color: var(--color-marca);
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--borde);
+}
+.formulario form { max-width: 480px; }
+.formulario fieldset { margin: 0 0 1rem; }
+
+/* Día 6 — Biblioteca de componentes (guía de estilo) */
+
+/* Variantes de botón */
+.boton--secundario {
+  background: transparent;
+  color: var(--color-marca);
+  border: 2px solid var(--color-marca);
+}
+.boton--secundario:hover { background: var(--color-marca-sua); }
+.boton--peligro {
+  background: var(--error);
+  color: var(--superficie-alta);
+}
+.boton--peligro:hover { background: var(--error-oscura); }
+.boton--activo {
+  background: var(--color-marca);
+  color: var(--superficie-alta);
+}
+button:disabled, .boton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Mensajes de alerta: color + ícono + texto, legibles sin color */
+.alerta {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: var(--t-1);
+}
+.alerta strong { min-width: max-content; }
+.alerta--exito { background: var(--exito-sua); border-color: var(--exito); color: var(--exito); }
+.alerta--advertencia { background: var(--advertencia-sua); border-color: var(--advertencia); color: var(--advertencia); }
+.alerta--error { background: var(--error-sua); border-color: var(--error); color: var(--error); }
+.alerta--info { background: var(--info-sua); border-color: var(--info); color: var(--info); }
+
+/* Campo de formulario: estado de error y deshabilitado */
+.campo { max-width: 360px; }
+input.invalid, select.invalid {
+  border-color: var(--error);
+  border-width: 2px;
+}
+.mensaje-error {
+  color: var(--error);
+  font-size: var(--t-1);
+  margin: 0.25rem 0 0;
+}
+input:disabled, select:disabled {
+  background: var(--superficie);
+  color: var(--texto-tenue);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Ventana modal */
+.modal {
+  background: var(--superficie-alta);
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  padding: 1.4rem;
+}
+.modal h2 { margin-top: 0; }
+
+/* Muestras de la guía: paleta, tipografía y demo */
+.seccion-componente { margin: 2.2rem 0 0; }
+.seccion-componente > h2 {
+  font-size: var(--t-3);
+  color: var(--color-marca);
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--borde);
+  margin: 0 0 0.8rem;
+}
+.demo-grupo { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-top: 0.8rem; }
+.demo-etiqueta {
+  width: 100%;
+  margin: 1rem 0 0;
+  font-size: var(--t-1);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--texto-tenue);
+}
+.demo-estados {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  font-size: var(--t-1);
+}
+.demo-estados li {
+  background: var(--superficie-alta);
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  color: var(--texto-tenue);
+}
+.demo-fondo { background: var(--fondo-modal); border-radius: 8px; padding: 1.5rem; margin-top: 1rem; }
+.demo-fondo .modal { position: static; transform: none; }
+
+.paleta { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.6rem; }
+.muestra {
+  width: 140px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--superficie-alta);
+}
+.muestra-color { height: 48px; }
+.muestra p { margin: 0; padding: 0.3rem 0.5rem; font-size: var(--t-1); }
+
+.muestra--superficie { background: var(--superficie); }
+.muestra--superficie-alta { background: var(--superficie-alta); }
+.muestra--marca { background: var(--color-marca); }
+.muestra--marca-sua { background: var(--color-marca-sua); }
+.muestra--accion { background: var(--color-accion); }
+.muestra--accion-oscura { background: var(--color-accion-oscura); }
+.muestra--acento { background: var(--color-acento); }
+.muestra--texto { background: var(--texto); }
+.muestra--texto-tenue { background: var(--texto-tenue); }
+.muestra--exito { background: var(--exito); }
+.muestra--advertencia { background: var(--advertencia); }
+.muestra--error { background: var(--error); }
+.muestra--info { background: var(--info); }
+
+.demo-t1 { font-size: var(--t-1); }
+.demo-t2 { font-size: var(--t-2); }
+.demo-t3 { font-size: var(--t-3); }
+.demo-t4 { font-size: var(--t-4); }
+.demo-t5 { font-size: var(--t-5); }
+</style>
+</head>
+<body class="panel">
+    <header class="encabezado barra">
+        <div class="encabezado-marca">
+            <button type="button" class="boton-menu" id="boton-menu" aria-controls="menu-lateral" aria-expanded="false">Menú</button>
+            <svg viewBox="0 0 320 110" width="64" role="img" aria-label="Logo de ISoT"><text x="10" y="90" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="96" letter-spacing="-3">
+    <tspan fill="#1A1A1A">IS</tspan><tspan fill="#F7C52A">o</tspan><tspan fill="#1A1A1A">T</tspan>
+  </text></svg>
+            <p class="nombre-sitio">ISoT — Guía de componentes</p>
+        </div>
+        <div class="usuario">
+            <span>J. Zambrano · Administrador</span>
+            <a href="login.html">Cerrar sesión</a>
+        </div>
+    </header>
+
+    <aside class="menu" id="menu-lateral">
+        <nav aria-label="Menú principal">
+            <ul>
+                <li><a href="dashboard.html">Tablero</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="componentes.html" class="activo">Componentes</a></li>
+                <li><a href="categorias.html">Categorías</a></li>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="pedidos.html">Pedidos</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="contenido">
+        <h1>Guía de componentes</h1>
+        <p class="texto-tenue">Biblioteca de interfaz del sistema. Todo componente interactivo debe documentar sus cinco estados: normal, :hover, :focus-visible, activo y deshabilitado.</p>
+
+        <section class="seccion-componente">
+            <h2>Escala tipográfica</h2>
+            <p class="demo-t1">--t-1 · 0.875rem — texto pequeño y tenue</p>
+            <p class="demo-t2">--t-2 · 1rem — base del sistema</p>
+            <p class="demo-t3">--t-3 · 1.25rem — encabezado de sección</p>
+            <p class="demo-t4">--t-4 · 1.5rem — subtítulo o valor destacado</p>
+            <p class="demo-t5">--t-5 · 1.9rem — encabezado de página (h1)</p>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Paleta de color (tokens)</h2>
+            <div class="paleta">
+                <div class="muestra">
+                    <div class="muestra-color muestra--superficie"></div>
+                    <p>--superficie<br>#FAF9F4</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--superficie-alta"></div>
+                    <p>--superficie-alta<br>#FFFFFF</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--marca"></div>
+                    <p>--color-marca<br>#1A1A1A</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--marca-sua"></div>
+                    <p>--color-marca-sua<br>#FFF3C4</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--accion"></div>
+                    <p>--color-accion<br>#F7C52A</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--accion-oscura"></div>
+                    <p>--color-accion-oscura<br>#DFAB00</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--acento"></div>
+                    <p>--color-acento<br>#7A5400</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--texto"></div>
+                    <p>--texto<br>#1A1A1A</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--texto-tenue"></div>
+                    <p>--texto-tenue<br>#4D4D4D</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--exito"></div>
+                    <p>--exito<br>#1E6B26</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--advertencia"></div>
+                    <p>--advertencia<br>#945200</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--error"></div>
+                    <p>--error<br>#B3261E</p>
+                </div>
+                <div class="muestra">
+                    <div class="muestra-color muestra--info"></div>
+                    <p>--info<br>#15506B</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Botones</h2>
+
+            <p class="demo-etiqueta">Primario (acción principal)</p>
+            <div class="demo-grupo">
+                <button type="button" class="boton">Guardar cambios</button>
+                <button type="button" class="boton boton--activo">Activo</button>
+                <button type="button" class="boton" disabled>Deshabilitado</button>
+            </div>
+
+            <p class="demo-etiqueta">Secundario</p>
+            <div class="demo-grupo">
+                <button type="button" class="boton boton--secundario">Cancelar</button>
+                <button type="button" class="boton boton--secundario boton--activo">Activo</button>
+                <button type="button" class="boton boton--secundario" disabled>Deshabilitado</button>
+            </div>
+
+            <p class="demo-etiqueta">Peligro</p>
+            <div class="demo-grupo">
+                <button type="button" class="boton boton--peligro">Eliminar</button>
+                <button type="button" class="boton boton--peligro boton--activo">Activo</button>
+                <button type="button" class="boton boton--peligro" disabled>Deshabilitado</button>
+            </div>
+
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>:hover (cursor encima)</li>
+                <li>:focus-visible (tecla Tab)</li>
+                <li>activo (pulsado/seleccionado)</li>
+                <li>deshabilitado (disabled)</li>
+            </ul>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Campos de formulario</h2>
+
+            <p class="demo-etiqueta">Normal</p>
+            <div class="demo-grupo">
+                <div class="campo">
+                    <label for="demo-correo">Correo electrónico</label>
+                    <input type="email" id="demo-correo" name="demo-correo" value="j.zambrano@zdtechlab.co">
+                </div>
+            </div>
+
+            <p class="demo-etiqueta">Con error (aria-invalid)</p>
+            <div class="demo-grupo">
+                <div class="campo">
+                    <label for="demo-correo-error">Correo electrónico</label>
+                    <input type="email" id="demo-correo-error" name="demo-correo-error" value="correo@dominio.com" class="invalid" aria-invalid="true" aria-describedby="error-correo">
+                    <p class="mensaje-error" id="error-correo">El correo no tiene un formato válido.</p>
+                </div>
+            </div>
+
+            <p class="demo-etiqueta">Deshabilitado</p>
+            <div class="demo-grupo">
+                <div class="campo">
+                    <label for="demo-campo-deshabilitado">Campo bloqueado</label>
+                    <input type="text" id="demo-campo-deshabilitado" name="demo-campo-deshabilitado" value="No editable" disabled>
+                </div>
+            </div>
+
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>:hover</li>
+                <li>:focus-visible</li>
+                <li>activo (con valor / error)</li>
+                <li>deshabilitado</li>
+            </ul>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Tarjeta de indicador</h2>
+            <div class="demo-grupo">
+                <article class="indicador indicador--advertencia">
+                    <h3>Stock crítico</h3>
+                    <p>9</p>
+                </article>
+                <article class="indicador indicador--exito">
+                    <h3>Productos activos</h3>
+                    <p>128</p>
+                </article>
+            </div>
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>:hover (sobre la tarjeta)</li>
+                <li>:focus-visible (si contiene enlace)</li>
+                <li>activo (semántica del valor)</li>
+                <li>constante · no deshabilitable</li>
+            </ul>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Tabla de datos</h2>
+            <div class="listado">
+                <table>
+                    <caption>Productos registrados en el inventario</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Categoría</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Stock</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" data-label="Nombre">Teclado mecánico RGB</th>
+                            <td data-label="Categoría">Periféricos</td>
+                            <td data-label="Precio">$ 120.000</td>
+                            <td data-label="Stock">14</td>
+                            <td data-label="Acciones"><a href="productos.html">Editar</a> · <a href="productos.html">Eliminar</a></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" data-label="Nombre">Monitor 24" Full HD</th>
+                            <td data-label="Categoría">Pantallas</td>
+                            <td data-label="Precio">$ 680.000</td>
+                            <td data-label="Stock">7</td>
+                            <td data-label="Acciones"><a href="productos.html">Editar</a> · <a href="productos.html">Eliminar</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>:hover (fila)</li>
+                <li>:focus-visible (enlace de acción)</li>
+                <li>activo (encabezado de columna)</li>
+                <li>constante · no deshabilitable</li>
+            </ul>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Mensajes de alerta</h2>
+            <div class="demo-grupo">
+                <div class="alerta alerta--exito"><strong>Éxito:</strong> registro guardado correctamente.</div>
+            </div>
+            <div class="demo-grupo">
+                <div class="alerta alerta--advertencia"><strong>Advertencia:</strong> hay productos con stock bajo.</div>
+            </div>
+            <div class="demo-grupo">
+                <div class="alerta alerta--error"><strong>Error:</strong> credenciales inválidas.</div>
+            </div>
+            <div class="demo-grupo">
+                <div class="alerta alerta--info"><strong>Información:</strong> sesión activa.</div>
+            </div>
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>constante · no aplica Interacción</li>
+            </ul>
+        </section>
+
+        <section class="seccion-componente">
+            <h2>Ventana modal</h2>
+            <div class="demo-fondo">
+                <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+                    <h2 id="modal-titulo">Confirmar eliminación</h2>
+                    <p>Esta acción no se puede deshacer. El producto desaparecerá del listado.</p>
+                    <div class="demo-grupo">
+                        <button type="button" class="boton boton--peligro">Eliminar</button>
+                        <button type="button" class="boton boton--secundario">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+            <ul class="demo-estados">
+                <li>normal</li>
+                <li>:focus-visible (botones dentro)</li>
+                <li>:hover (botones)</li>
+                <li>activo (confirmación)</li>
+                <li>deshabilitado (botón Eliminar en proceso)</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="pie">
+        <p>ISoT — Sistema de gestión. © 2026</p>
+    </footer>
+</body>
+</html>
