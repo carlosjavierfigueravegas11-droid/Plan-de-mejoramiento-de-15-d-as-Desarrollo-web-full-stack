@@ -409,6 +409,16 @@ tbody tr:hover { background: var(--info-sua); }
 .formulario form { max-width: 480px; }
 .formulario fieldset { margin: 0 0 1rem; }
 
+/* Día 8 — interactividad: buscador, botones de fila y errores junto al campo */
+.buscador { max-width: 320px; margin-bottom: 1rem; }
+.boton-mini {
+  padding: 0.35rem 0.7rem;
+  font-size: var(--t-1);
+}
+.boton-mini.boton-peligro { background: var(--error); }
+.boton-mini.boton-peligro:hover { background: var(--error-oscura); }
+.mensaje-error:empty { display: none; }
+
 /* Día 6 — Biblioteca de componentes (guía de estilo) */
 
 /* Variantes de botón */
