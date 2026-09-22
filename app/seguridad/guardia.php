@@ -8,21 +8,36 @@ declare(strict_types=1);
  * Ocultar un enlace en el menú NO es seguridad: la restricción se verifica aquí, en el servidor.
  */
 
+require_once __DIR__ . '/../config/app.php';
 require_once __DIR__ . '/sesion.php';
 iniciarSesionSegura();
 
+/** ¿Es una API JSON? Entonces sin sesión se responde 401, no se redirige a login.php. */
+$esApi = isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/api/') === 0;
+
+function redirigirAPorFallo(string $mensaje): void
+{
+    global $esApi;
+    if ($esApi) {
+        http_response_code(401);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['error' => $mensaje]);
+        exit;
+    }
+    header('Location: ' . BASE_URL . 'login.php?m=' . $mensaje);
+    exit;
+}
+
 /* 1. ¿Hay sesión? */
 if (usuarioActual() === null) {
-    header('Location: login.php?m=requiere_ingreso');
-    exit;
+    redirigirAPorFallo('requiere_ingreso');
 }
 
 /* 2. ¿Es el mismo navegador? (huella del cliente) */
 $huella = hash('sha256', $_SERVER['HTTP_USER_AGENT'] ?? '');
 if (($_SESSION['huella'] ?? '') !== $huella) {
     cerrarSesion();
-    header('Location: login.php?m=sesion_invalida');
-    exit;
+    redirigirAPorFallo('sesion_invalida');
 }
 
 /* 3. Inactividad y duración máxima */
@@ -31,8 +46,7 @@ $inactividad = (int) ($_SESSION['ultima_actividad'] ?? $ahora);
 $inicio = (int) ($_SESSION['inicio'] ?? $ahora);
 if ($ahora - $inactividad > INACTIVIDAD_MAX || $ahora - $inicio > SESION_MAX) {
     cerrarSesion();
-    header('Location: login.php?m=sesion_expirada');
-    exit;
+    redirigirAPorFallo('sesion_expirada');
 }
 $_SESSION['ultima_actividad'] = $ahora;
 

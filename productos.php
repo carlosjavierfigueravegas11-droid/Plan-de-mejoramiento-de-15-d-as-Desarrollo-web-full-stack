@@ -21,39 +21,12 @@ $puedeEliminar = puede('admin');              // eliminar registros
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Productos — ISoT</title>
-    <link rel="stylesheet" href="css/tokens.css">
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/tokens.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/estilos.css">
 </head>
 <body class="panel" <?= $puedeEditar ? 'data-puede-editar="1"' : 'data-puede-editar="0"' ?> <?= $puedeEliminar ? 'data-puede-eliminar="1"' : 'data-puede-eliminar="0"' ?>>
-    <header class="encabezado barra">
-        <div class="encabezado-marca">
-            <button type="button" class="boton-menu" id="boton-menu" aria-controls="menu-lateral" aria-expanded="false">Menú</button>
-            <img src="assets/img/logo.svg" alt="Logo de ISoT" width="64">
-            <p class="nombre-sitio">ISoT — Panel de gestión</p>
-        </div>
-        <div class="usuario">
-            <span><?= htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8') ?> · <?= htmlspecialchars($usuario['rol'], ENT_QUOTES, 'UTF-8') ?></span>
-            <a href="salir.php">Cerrar sesión</a>
-        </div>
-    </header>
-
-    <aside class="menu" id="menu-lateral">
-        <nav aria-label="Menú principal">
-            <ul>
-                <li><a href="dashboard.php">Tablero</a></li>
-                <li><a href="productos.php" class="activo" aria-current="page">Productos</a></li>
-                <?php if ($puedeEditar): ?>
-                    <li><a href="categorias.html">Categorías</a></li>
-                    <li><a href="clientes.html">Clientes</a></li>
-                    <li><a href="pedidos.html">Pedidos</a></li>
-                <?php endif; ?>
-                <li><a href="reportes.html">Reportes</a></li>
-                <?php if ($puedeEliminar): ?>
-                    <li><a href="usuarios.php">Usuarios</a></li>
-                <?php endif; ?>
-            </ul>
-        </nav>
-    </aside>
+    <?php require __DIR__ . '/app/vistas/parciales/cabecera.php'; ?>
+    <?php require __DIR__ . '/app/vistas/parciales/menu.php'; ?>
 
     <main class="contenido">
         <h1>Productos</h1>
@@ -76,7 +49,9 @@ $puedeEliminar = puede('admin');              // eliminar registros
                         <th scope="col">Categoría</th>
                         <th scope="col">Precio</th>
                         <th scope="col">Stock</th>
-                        <th scope="col">Acciones</th>
+                        <?php if ($puedeEditar || $puedeEliminar): ?>
+                            <th scope="col">Acciones</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -120,11 +95,8 @@ $puedeEliminar = puede('admin');              // eliminar registros
         <?php endif; ?>
     </main>
 
-    <footer class="pie">
-        <p>ISoT — Sistema de gestión. © 2026</p>
-    </footer>
-
-    <script src="js/datos-prueba.js"></script>
-    <script src="js/app.js"></script>
+    <?php require __DIR__ . '/app/vistas/parciales/pie.php'; ?>
+    <script src="<?= BASE_URL ?>js/datos-prueba.js"></script>
+    <script src="<?= BASE_URL ?>js/app.js"></script>
 </body>
 </html>

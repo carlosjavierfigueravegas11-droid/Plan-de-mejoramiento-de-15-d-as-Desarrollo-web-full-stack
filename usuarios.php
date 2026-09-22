@@ -22,31 +22,12 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Usuarios — ISoT</title>
-    <link rel="stylesheet" href="css/tokens.css">
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/tokens.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/estilos.css">
 </head>
 <body class="panel">
-    <header class="encabezado barra">
-        <div class="encabezado-marca">
-            <img src="assets/img/logo.svg" alt="Logo de ISoT" width="64">
-            <p class="nombre-sitio">ISoT — Panel de gestión</p>
-        </div>
-        <div class="usuario">
-            <span><?= htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8') ?> · <?= htmlspecialchars($usuario['rol'], ENT_QUOTES, 'UTF-8') ?></span>
-            <a href="salir.php">Cerrar sesión</a>
-        </div>
-    </header>
-
-    <aside class="menu" id="menu-lateral">
-        <nav aria-label="Menú principal">
-            <ul>
-                <li><a href="dashboard.php">Tablero</a></li>
-                <li><a href="productos.php">Productos</a></li>
-                <li><a href="reportes.html">Reportes</a></li>
-                <li><a href="usuarios.php" class="activo" aria-current="page">Usuarios</a></li>
-            </ul>
-        </nav>
-    </aside>
+    <?php require __DIR__ . '/app/vistas/parciales/cabecera.php'; ?>
+    <?php require __DIR__ . '/app/vistas/parciales/menu.php'; ?>
 
     <main class="contenido">
         <h1>Gestión de usuarios</h1>
@@ -86,8 +67,6 @@ try {
         </section>
     </main>
 
-    <footer class="pie">
-        <p>ISoT — Sistema de gestión. © 2026</p>
-    </footer>
+    <?php require __DIR__ . '/app/vistas/parciales/pie.php'; ?>
 </body>
 </html>

@@ -3,7 +3,11 @@ const moneda = new Intl.NumberFormat("es-CO", { style: "currency", currency: "CO
 const botonMenu = document.querySelector(".boton-menu");
 const menuLateral = document.querySelector("#menu-lateral");
 if (botonMenu && menuLateral) {
-  botonMenu.addEventListener("click", () => menuLateral.classList.toggle("abierto"));
+  botonMenu.addEventListener("click", () => {
+    const abierto = menuLateral.classList.toggle("abierto");
+    botonMenu.setAttribute("aria-expanded", abierto ? "true" : "false");
+    botonMenu.setAttribute("aria-controls", "menu-lateral");
+  });
 }
 
 const tbody = document.querySelector("#tabla-productos tbody");

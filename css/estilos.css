@@ -570,4 +570,164 @@ input:disabled, select:disabled {
 .demo-t2 { font-size: var(--t-2); }
 .demo-t3 { font-size: var(--t-3); }
 .demo-t4 { font-size: var(--t-4); }
+
+/* Gráficos del tablero (día 14) */
+.graficos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.graficos h2 {
+  grid-column: 1 / -1;
+  font-size: var(--t-3);
+  color: var(--texto-tenue);
+}
+.grafico {
+  background: var(--superficie-alta);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 1rem 1.1rem 1.1rem;
+}
+.grafico h3 { margin: 0 0 0.8rem; font-size: var(--t-2); color: var(--texto); }
+.grafico__lienzo { position: relative; height: 260px; }
+.grafico--ancho { grid-column: 1 / -1; }
+.grafico--ancho .grafico__lienzo { height: 300px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .grafico__lienzo :is(canvas) { transition: none !important; }
+}
+
+@media (min-width: 1024px) {
+  .grafico:not(.grafico--ancho) { grid-column: auto; }
+  .grafico__lienzo { height: 240px; }
+}
+@media (max-width: 480px) {
+  .grafico__lienzo, .grafico--ancho .grafico__lienzo { height: 220px; }
+}
+
+/* Cabecera del tablero en vivo: título, sello de hora y selector de rango */
+.cabecera-tablero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin: 0.2rem 0 1.1rem;
+}
+.titulo-tablero {
+  margin: 0 0 0.25rem;
+  font-size: var(--t-4);
+  color: var(--texto);
+}
+.estado-vivo {
+  margin: 0;
+  font-size: var(--t-1);
+  color: var(--texto-tenue);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+.punto-vivo {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--exito);
+  box-shadow: 0 0 0 0 rgba(30,107,38,0.5);
+  animation: pulso 2s infinite;
+}
+@keyframes pulso {
+  0%   { box-shadow: 0 0 0 0 rgba(30,107,38,0.5); }
+  70%  { box-shadow: 0 0 0 0.55rem rgba(30,107,38,0); }
+  100% { box-shadow: 0 0 0 0 rgba(30,107,38,0); }
+}
+.enlace-refrescar {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-acento);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--t-1);
+}
+.enlace-refrescar:hover { color: var(--texto); }
+
+.rango {
+  display: inline-flex;
+  gap: 0.35rem;
+  background: var(--superficie-alta);
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  padding: 0.25rem;
+}
+.rango button {
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: var(--t-1);
+  color: var(--texto-tenue);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.rango button.activo {
+  background: var(--color-accion);
+  color: var(--color-accion-texto);
+  font-weight: 700;
+}
+.sr-only-resumen {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  margin: -1px;
+}
+
+/* Sparklines en las tarjetas de indicadores */
+.spark {
+  margin-top: 0.6rem;
+  height: 32px;
+}
+.spark canvas { width: 100%; height: 32px; }
+
+/* Micro-interacción: las tarjetas y los gráficos se levantan al pasar el cursor */
+.indicador, .grafico {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.indicador:hover, .grafico:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(26,26,26,0.12);
+}
+
+/* Badges de estado de los pedidos (legibles en blanco y negro) */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: var(--t-1);
+  font-weight: 700;
+  border: 1px solid currentColor;
+}
+.badge--pendiente { color: var(--advertencia); background: var(--advertencia-sua); }
+.badge--enviado   { color: var(--info);      background: var(--info-sua); }
+.badge--entregado { color: var(--exito);     background: var(--exito-sua); }
+.badge--cancelado { color: var(--texto-tenue); background: var(--superficie); }
+
+.reciente-cliente { font-weight: 700; }
+.reciente-fecha, .reciente-total { white-space: nowrap; }
+.reciente-total { text-align: right; }
+.stock-bajo { font-weight: 700; color: var(--error); }
+
+@media (prefers-reduced-motion: reduce) {
+  .punto-vivo { animation: none; }
+  .indicador, .grafico { transition: none; }
+  .indicador:hover, .grafico:hover { transform: none; box-shadow: none; }
+}
+
+@media (max-width: 767px) {
+  .cabecera-tablero { flex-direction: column; align-items: stretch; }
+  .rango { align-self: flex-start; }
+}
 .demo-t5 { font-size: var(--t-5); }
