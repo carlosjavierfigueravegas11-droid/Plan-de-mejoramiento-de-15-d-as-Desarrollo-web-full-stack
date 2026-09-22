@@ -480,6 +480,12 @@ input.invalid, select.invalid {
   font-size: var(--t-1);
   margin: 0.25rem 0 0;
 }
+.mensaje-exito {
+  color: var(--exito);
+  font-size: var(--t-1);
+  margin: 0.25rem 0 0;
+}
+.etiqueta-estado.exito { background: var(--exito-sua); color: var(--exito); }
 input:disabled, select:disabled {
   background: var(--superficie);
   color: var(--texto-tenue);

@@ -12,7 +12,9 @@ const formProducto = document.querySelector("#form-producto");
 const hayTabla = Boolean(tbody && buscador && formProducto);
 
 const sirviendoDelServidor = location.protocol.startsWith("http");
+const API = "app/rutas/productos.php";
 let datos = [];
+let editandoId = null;
 
 function plantillaProducto(p) {
   const tr = document.createElement("tr");
@@ -69,7 +71,7 @@ if (hayTabla) {
   }
 
   async function cargarDesdeServidor() {
-    const respuesta = await fetch("app/rutas/productos.php", { headers: { Accept: "application/json" } });
+    const respuesta = await fetch(API, { headers: { Accept: "application/json" } });
     if (!respuesta.ok) throw new Error("API no disponible");
     const json = await respuesta.json();
     if (!Array.isArray(json)) throw new Error("Respuesta no válida");
@@ -152,57 +154,138 @@ if (hayTabla) {
     return texto;
   }
 
-  formProducto.addEventListener("submit", (e) => {
-    e.preventDefault();
-    let valido = true;
+  function limpiarValidacion() {
     Array.from(formProducto.elements).forEach((campo) => {
-      if (campo.name && reglas[campo.name] && validarCampo(campo) !== "") valido = false;
+      if (reglas[campo.name]) validarCampo(campo);
     });
-    if (valido) {
-      agregarProducto();
-    } else {
-      const primero = formProducto.querySelector(".invalid");
-      if (primero) primero.focus();
-    }
-  });
-
-  formProducto.addEventListener("input", (e) => {
-    if (e.target.name && reglas[e.target.name]) validarCampo(e.target);
-  });
-
-  function abrirFormulario(id) {
-    const producto = datos.find((p) => p.id === id);
-    if (!producto) return;
-    formProducto.elements.nombre.value = producto.nombre;
-    formProducto.elements.categoria.value = producto.categoria;
-    formProducto.elements.precio.value = producto.precio;
-    formProducto.elements.stock.value = producto.stock;
-    formProducto.elements.nombre.focus();
-    formProducto.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
   function eliminarProducto(id) {
+    if (sirviendoDelServidor) {
+      eliminarEnServidor(id);
+      return;
+    }
     const indice = datos.findIndex((p) => p.id === id);
     if (indice === -1) return;
     datos.splice(indice, 1);
     pintarTabla(datos);
   }
 
-  function agregarProducto() {
-    const nuevo = {
-      id: datos.length ? Math.max(...datos.map((p) => p.id)) + 1 : 1,
+  function abrirFormulario(id) {
+    const producto = datos.find((p) => p.id === id);
+    if (!producto) return;
+    editandoId = id;
+    formProducto.elements.nombre.value = producto.nombre;
+    formProducto.elements.categoria.value = producto.categoria;
+    formProducto.elements.precio.value = producto.precio;
+    formProducto.elements.stock.value = producto.stock;
+    formProducto.querySelector(".acciones-formulario label");
+    const botonGuardar = formProducto.querySelector("button[type='submit']");
+    if (botonGuardar) botonGuardar.textContent = "Guardar cambios";
+    formProducto.elements.nombre.focus();
+    formProducto.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function leerFormulario() {
+    return {
+      id: editandoId,
       nombre: formProducto.elements.nombre.value.trim(),
       categoria: formProducto.elements.categoria.value,
       precio: Number(formProducto.elements.precio.value),
       stock: Number(formProducto.elements.stock.value)
     };
-    datos.push(nuevo);
+  }
+
+  function objetoLocal(item) {
+    return {
+      id: item.id,
+      nombre: item.nombre,
+      categoria: item.categoria,
+      precio: Number(item.precio),
+      stock: Number(item.stock)
+    };
+  }
+
+  formProducto.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let valido = true;
+    Array.from(formProducto.elements).forEach((campo) => {
+      if (campo.name && reglas[campo.name] && validarCampo(campo) !== "") valido = false;
+    });
+    if (!valido) {
+      const primero = formProducto.querySelector(".invalid");
+      if (primero) primero.focus();
+      return;
+    }
+
+    if (sirviendoDelServidor) {
+      if (editandoId !== null) {
+        actualizarEnServidor(leerFormulario());
+      } else {
+        crearEnServidor(leerFormulario());
+      }
+      return;
+    }
+
+    const datosForm = leerFormulario();
+    if (datosForm.id !== null) {
+      const indice = datos.findIndex((p) => p.id === datosForm.id);
+      if (indice !== -1) datos[indice] = objetoLocal(datosForm);
+    } else {
+      datos.push({
+        id: datos.length ? Math.max(...datos.map((p) => p.id)) + 1 : 1,
+        nombre: datosForm.nombre,
+        categoria: datosForm.categoria,
+        precio: datosForm.precio,
+        stock: datosForm.stock
+      });
+    }
+    editandoId = null;
     pintarTabla(datos);
     formProducto.reset();
-    Array.from(formProducto.elements).forEach((campo) => {
-      if (reglas[campo.name]) validarCampo(campo);
+    const botonGuardar = formProducto.querySelector("button[type='submit']");
+    if (botonGuardar) botonGuardar.textContent = "Guardar producto";
+    limpiarValidacion();
+  });
+
+  async function crearEnServidor(item) {
+    const respuesta = await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ nombre: item.nombre, categoria: item.categoria, precio: item.precio, stock: item.stock })
     });
+    if (respuesta.ok) {
+      editandoId = null;
+      formProducto.reset();
+      limpiarValidacion();
+      await cargarDesdeServidor();
+    }
   }
+
+  async function actualizarEnServidor(item) {
+    const respuesta = await fetch(`${API}?id=${item.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ nombre: item.nombre, categoria: item.categoria, precio: item.precio, stock: item.stock })
+    });
+    if (respuesta.ok) {
+      editandoId = null;
+      formProducto.reset();
+      limpiarValidacion();
+      await cargarDesdeServidor();
+    }
+  }
+
+  async function eliminarEnServidor(id) {
+    const respuesta = await fetch(`${API}?id=${id}`, { method: "DELETE" });
+    if (respuesta.ok) {
+      await cargarDesdeServidor();
+    }
+  }
+
+  formProducto.addEventListener("input", (e) => {
+    if (e.target.name && reglas[e.target.name]) validarCampo(e.target);
+  });
 
   if (sirviendoDelServidor) {
     cargarDesdeServidor().catch(cargarRespaldoLocal);

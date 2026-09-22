@@ -3,24 +3,60 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/app/config/conexion.php';
 require_once __DIR__ . '/app/modelos/UsuarioModelo.php';
+require_once __DIR__ . '/app/seguridad/csrf.php';
+require_once __DIR__ . '/app/seguridad/intentos.php';
 
-$error = null;
-$usuario = null;
-$correo = $_POST['correo'] ?? '';
+session_start();
+
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $clave = $_POST['clave'] ?? '';
+    if (!validarCsrf($_POST['csrf'] ?? null)) {
+        http_response_code(419);
+        exit('Solicitud no válida. Recargue el formulario.');
+    }
 
-    try {
+    $correo = trim((string) ($_POST['correo'] ?? ''));
+    $clave = (string) ($_POST['clave'] ?? '');
+
+    if (!filter_var($correo, FILTER_VALIDATE_EMAIL) || strlen($clave) < 8) {
+        $error = 'Correo o contraseña incorrectos.'; // mensaje genérico
+    } else {
         $pdo = Conexion::obtener();
-        $usuario = buscarPorCorreo($pdo, $correo);
 
-        if ($usuario === null || !password_verify($clave, $usuario['clave_hash'])) {
-            $usuario = null;
-            $error = 'Credenciales incorrectas.';
+        if (cuentaBloqueada($pdo, $correo)) {
+            $error = 'Cuenta bloqueada temporalmente. Intente más tarde.';
+        } else {
+            $u = buscarPorCorreo($pdo, $correo);
+
+            if ($u && (int) $u['activo'] === 1 && password_verify($clave, $u['clave_hash'])) {
+                if (password_needs_rehash($u['clave_hash'], PASSWORD_DEFAULT)) {
+                    $nuevo = password_hash($clave, PASSWORD_DEFAULT);
+                    $pdo->prepare("UPDATE usuarios SET clave_hash = :h WHERE id = :id")
+                        ->execute([':h' => $nuevo, ':id' => $u['id']]);
+                }
+
+                registrarIntento($pdo, $correo, true);
+
+                session_regenerate_id(true);
+                $_SESSION['usuario_id'] = (int) $u['id'];
+                $_SESSION['usuario_nombre'] = $u['nombre'];
+                $_SESSION['usuario_correo'] = $u['correo'];
+                $_SESSION['usuario_rol'] = $u['rol'];
+
+                header('Location: dashboard.php');
+                exit;
+            } else {
+                registrarIntento($pdo, $correo, false);
+
+                if (contarIntentosFallidos($pdo, $correo) >= MAX_INTENTOS && $u !== null) {
+                    bloquearCuenta($pdo, (int) $u['id']);
+                    $error = 'Cuenta bloqueada temporalmente. Intente más tarde.';
+                } else {
+                    $error = 'Correo o contraseña incorrectos.'; // idéntico para ambos casos
+                }
+            }
         }
-    } catch (PDOException $e) {
-        $error = 'No se pudo conectar con la base de datos.';
     }
 }
 ?>
@@ -34,16 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-    <?php if ($usuario !== null): ?>
-    <main class="pantalla-ingreso">
-        <section class="formulario resultado-ok">
-            <h1>Sesión iniciada</h1>
-            <p>Bienvenido, <?= htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8') ?>.</p>
-            <p>Consulta de usuario realizada con sentencia preparada (PDO).</p>
-            <a class="boton" href="productos.php">Ir al panel</a>
-        </section>
-    </main>
-    <?php else: ?>
     <main class="pantalla-ingreso">
         <section class="marca">
             <img src="assets/img/logo.svg" alt="Logo de ISoT" width="200">
@@ -53,22 +79,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <section class="formulario">
             <h2>Iniciar sesión</h2>
-            <?php if ($error !== null): ?>
-                <p class="mensaje-error" id="error-login" aria-live="polite"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+            <?php if ($error !== ''): ?>
+                <p class="mensaje-error" id="error-login" role="alert" aria-live="polite">
+                    <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
+                </p>
             <?php endif; ?>
-            <form action="login.php" method="post" novalidate>
+            <form method="post" action="login.php" novalidate>
+                <input type="hidden" name="csrf" value="<?= htmlspecialchars(tokenCsrf(), ENT_QUOTES, 'UTF-8') ?>">
+
                 <label for="correo">Correo electrónico</label>
-                <input type="email" id="correo" name="correo" required autocomplete="username"
-                       value="<?= htmlspecialchars($correo, ENT_QUOTES, 'UTF-8') ?>">
+                <input type="email" id="correo" name="correo" required autocomplete="username">
 
                 <label for="clave">Contraseña</label>
                 <input type="password" id="clave" name="clave" required autocomplete="current-password" minlength="8">
 
                 <button type="submit">Iniciar sesión</button>
             </form>
-            <p class="nota">Acceso restringido al equipo del programa.</p>
+            <p class="nota"><a href="registro.php">Registrar acceso</a></p>
         </section>
     </main>
-    <?php endif; ?>
 </body>
 </html>

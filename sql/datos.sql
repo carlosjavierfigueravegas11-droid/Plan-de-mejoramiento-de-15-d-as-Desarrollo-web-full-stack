@@ -91,7 +91,14 @@ INSERT INTO detalle_pedidos (pedido_id, producto_id, cantidad, precio_unitario) 
 (17, 6,  1, 180000.00),
 (18, 21, 1, 110000.00);
 
--- Usuario administrador inicial (clave: Admin2026* — hash generado con password_hash)
-INSERT INTO usuarios (id, nombre, correo, clave_hash, rol) VALUES
+-- Usuarios de prueba (nunca se guarda la contraseña; solo el hash password_hash).
+-- admin:   carlos.figuera@isot.co / Admin2026*
+-- vendedor: vendedor@isot.co      / Vendedor2026*
+-- consultor: consultor@isot.co    / Consultor2026*
+INSERT INTO usuarios (id, nombre, correo, clave_hash, rol, activo, creado_en) VALUES
 (1, 'Carlos Figuera', 'carlos.figuera@isot.co',
- '$2y$10$.oM0RDyc2azE1YYwRefP5O.tR9u59nTNeQDF3cGfNEAqtZQ7Vio6y', 'admin');
+ '$2y$10$.oM0RDyc2azE1YYwRefP5O.tR9u59nTNeQDF3cGfNEAqtZQ7Vio6y', 'admin', 1, NOW()),
+(2, 'Laura Vendedora', 'vendedor@isot.co',
+ '$2y$10$.r4sodyrVJU1rXtrGqPKf.SXqvMhWwdvrTVPBZU6HJIU7dzgqcyUO', 'vendedor', 1, NOW()),
+(3, 'Pedro Consultor', 'consultor@isot.co',
+ '$2y$10$PDxvd9ODleeSveF/t9SED.Ls0egWoEsa1os7Lm2FSrjfY1W5l4b/i', 'consultor', 1, NOW());

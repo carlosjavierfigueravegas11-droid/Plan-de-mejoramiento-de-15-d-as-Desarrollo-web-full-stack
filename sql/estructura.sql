@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS pedidos;
 DROP TABLE IF EXISTS clientes;
 DROP TABLE IF EXISTS productos;
 DROP TABLE IF EXISTS categorias;
+DROP TABLE IF EXISTS intentos_acceso;
 DROP TABLE IF EXISTS usuarios;
 
 CREATE TABLE categorias (
@@ -64,10 +65,22 @@ CREATE TABLE detalle_pedidos (
 ) ENGINE = InnoDB;
 
 CREATE TABLE usuarios (
-    id         INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    nombre     VARCHAR(120) NOT NULL,
-    correo     VARCHAR(120) NOT NULL UNIQUE,
-    clave_hash VARCHAR(255) NOT NULL,
-    rol        ENUM('admin', 'vendedor', 'consultor') NOT NULL DEFAULT 'consultor',
+    id             INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    nombre         VARCHAR(120) NOT NULL,
+    correo         VARCHAR(120) NOT NULL UNIQUE,
+    clave_hash     VARCHAR(255) NOT NULL,
+    rol            ENUM('admin', 'vendedor', 'consultor') NOT NULL DEFAULT 'consultor',
+    activo         TINYINT(1) NOT NULL DEFAULT 1,
+    bloqueado_hasta DATETIME NULL,
+    creado_en      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_usuarios_correo (correo)
+) ENGINE = InnoDB;
+
+CREATE TABLE intentos_acceso (
+    id         INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    correo     VARCHAR(120) NOT NULL,
+    exitoso    TINYINT(1) NOT NULL DEFAULT 0,
+    ip         VARCHAR(45) NOT NULL,
+    intentado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_intentos_correo (correo, intentado_en)
 ) ENGINE = InnoDB;
