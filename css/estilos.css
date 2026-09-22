@@ -419,6 +419,17 @@ tbody tr:hover { background: var(--info-sua); }
 .boton-mini.boton-peligro:hover { background: var(--error-oscura); }
 .mensaje-error:empty { display: none; }
 
+/* Día 9 — fuente de datos del listado */
+.fuente-datos { margin: 0 0 1rem; font-size: var(--t-1); }
+.etiqueta-estado {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: var(--t-1);
+}
+.estado-ok { background: var(--exito-sua); color: var(--exito); }
+.estado-error { background: var(--error-sua); color: var(--error); }
+
 /* Día 6 — Biblioteca de componentes (guía de estilo) */
 
 /* Variantes de botón */

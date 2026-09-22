@@ -9,7 +9,10 @@ if (botonMenu && menuLateral) {
 const tbody = document.querySelector("#tabla-productos tbody");
 const buscador = document.querySelector("#buscador");
 const formProducto = document.querySelector("#form-producto");
-const hayTabla = Boolean(tbody && buscador && formProducto && typeof productos !== "undefined");
+const hayTabla = Boolean(tbody && buscador && formProducto);
+
+const sirviendoDelServidor = location.protocol.startsWith("http");
+let datos = [];
 
 function plantillaProducto(p) {
   const tr = document.createElement("tr");
@@ -65,6 +68,21 @@ if (hayTabla) {
     tbody.replaceChildren(...lista.map(plantillaProducto));
   }
 
+  async function cargarDesdeServidor() {
+    const respuesta = await fetch("app/rutas/productos.php", { headers: { Accept: "application/json" } });
+    if (!respuesta.ok) throw new Error("API no disponible");
+    const json = await respuesta.json();
+    if (!Array.isArray(json)) throw new Error("Respuesta no válida");
+    datos = json;
+    pintarTabla(datos);
+  }
+
+  function cargarRespaldoLocal() {
+    if (typeof productos === "undefined") return;
+    datos = productos;
+    pintarTabla(datos);
+  }
+
   tbody.addEventListener("click", (e) => {
     const boton = e.target.closest("button[data-accion]");
     if (!boton) return;
@@ -74,13 +92,35 @@ if (hayTabla) {
     if (accion === "eliminar") eliminarProducto(id);
   });
 
-  buscador.addEventListener("input", (e) => {
-    const termino = e.target.value.trim().toLowerCase();
-    const filtrados = productos.filter(
+  function filtrarLocal(termino) {
+    return datos.filter(
       (p) => p.nombre.toLowerCase().includes(termino) || p.categoria.toLowerCase().includes(termino)
     );
-    pintarTabla(filtrados);
+  }
+
+  let esperaBusqueda = null;
+  buscador.addEventListener("input", (e) => {
+    const termino = e.target.value.trim().toLowerCase();
+
+    if (sirviendoDelServidor) {
+      buscarEnServidor(e.target.value.trim());
+      return;
+    }
+    pintarTabla(filtrarLocal(termino));
   });
+
+  async function buscarEnServidor(texto) {
+    clearTimeout(esperaBusqueda);
+    esperaBusqueda = setTimeout(async () => {
+      const respuesta = await fetch(
+        `app/rutas/buscar-productos.php?q=${encodeURIComponent(texto)}`,
+        { headers: { Accept: "application/json" } }
+      );
+      if (!respuesta.ok) return;
+      const json = await respuesta.json();
+      if (Array.isArray(json)) pintarTabla(json);
+    }, 250);
+  }
 
   const reglas = {
     nombre: (valor) => {
@@ -131,7 +171,7 @@ if (hayTabla) {
   });
 
   function abrirFormulario(id) {
-    const producto = productos.find((p) => p.id === id);
+    const producto = datos.find((p) => p.id === id);
     if (!producto) return;
     formProducto.elements.nombre.value = producto.nombre;
     formProducto.elements.categoria.value = producto.categoria;
@@ -142,27 +182,31 @@ if (hayTabla) {
   }
 
   function eliminarProducto(id) {
-    const indice = productos.findIndex((p) => p.id === id);
+    const indice = datos.findIndex((p) => p.id === id);
     if (indice === -1) return;
-    productos.splice(indice, 1);
-    pintarTabla(productos);
+    datos.splice(indice, 1);
+    pintarTabla(datos);
   }
 
   function agregarProducto() {
     const nuevo = {
-      id: Math.max(...productos.map((p) => p.id)) + 1,
+      id: datos.length ? Math.max(...datos.map((p) => p.id)) + 1 : 1,
       nombre: formProducto.elements.nombre.value.trim(),
       categoria: formProducto.elements.categoria.value,
       precio: Number(formProducto.elements.precio.value),
       stock: Number(formProducto.elements.stock.value)
     };
-    productos.push(nuevo);
-    pintarTabla(productos);
+    datos.push(nuevo);
+    pintarTabla(datos);
     formProducto.reset();
     Array.from(formProducto.elements).forEach((campo) => {
       if (reglas[campo.name]) validarCampo(campo);
     });
   }
 
-  pintarTabla(productos);
+  if (sirviendoDelServidor) {
+    cargarDesdeServidor().catch(cargarRespaldoLocal);
+  } else {
+    cargarRespaldoLocal();
+  }
 }
