@@ -20,14 +20,15 @@ $rol = $_SESSION['usuario']['rol'] ?? '';
 
 try {
     $pdo = Conexion::obtener();
+    $modelo = new ProductoModelo($pdo);
     $metodo = $_SERVER['REQUEST_METHOD'];
 
     // LEER (listar o buscar)
     if ($metodo === 'GET') {
         $q = isset($_GET['q']) ? trim((string) $_GET['q']) : '';
         $productos = $q === ''
-            ? listarProductos($pdo)
-            : buscarProductos($pdo, $q);
+            ? $modelo->listar('', 1, 1000)
+            : $modelo->listar($q, 1, 1000);
         echo json_encode($productos, JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -67,9 +68,23 @@ try {
         exit;
     }
 
+    // Resuelve el nombre de la categoría a su id; mantiene compatibilidad con el cliente JS.
+    $categoriaId = 0;
+    foreach ($modelo->categorias() as $fila) {
+        if ($fila['nombre'] === $categoria) {
+            $categoriaId = (int) $fila['id'];
+            break;
+        }
+    }
+    if ($categoriaId === 0) {
+        http_response_code(422);
+        echo json_encode(['error' => 'Categoría no válida.']);
+        exit;
+    }
+
     // CREAR
     if ($metodo === 'POST') {
-        $id = crearProducto($pdo, $nombre, $categoria, $precio, $stock);
+        $id = $modelo->crear($categoriaId, $nombre, $precio, $stock);
         http_response_code(201);
         echo json_encode(['id' => $id, 'mensaje' => 'Producto creado.']);
         exit;
@@ -83,7 +98,7 @@ try {
             echo json_encode(['error' => 'Falta el id del producto.']);
             exit;
         }
-        $ok = actualizarProducto($pdo, $id, $nombre, $categoria, $precio, $stock);
+        $ok = $modelo->actualizar($id, $categoriaId, $nombre, $precio, $stock);
         if (!$ok) {
             http_response_code(404);
             echo json_encode(['error' => 'Producto no encontrado.']);
@@ -101,7 +116,7 @@ try {
             echo json_encode(['error' => 'Falta el id del producto.']);
             exit;
         }
-        $ok = eliminarProducto($pdo, $id);
+        $ok = $modelo->desactivar($id);
         if (!$ok) {
             http_response_code(404);
             echo json_encode(['error' => 'Producto no encontrado.']);
@@ -113,9 +128,6 @@ try {
 
     http_response_code(405);
     echo json_encode(['error' => 'Método no permitido.']);
-} catch (DomainException $e) {
-    http_response_code(422);
-    echo json_encode(['error' => $e->getMessage()]);
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['error' => 'No se pudo consultar la base de datos']);

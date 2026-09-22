@@ -15,8 +15,8 @@ $opcionesMenu = [
     ['archivo' => 'dashboard.php', 'texto' => 'Tablero',    'roles' => ['admin', 'vendedor', 'consultor']],
     ['archivo' => 'productos.php', 'texto' => 'Productos',  'roles' => ['admin', 'vendedor', 'consultor']],
     ['archivo' => 'categorias.html', 'texto' => 'Categorías', 'roles' => ['admin', 'vendedor']],
-    ['archivo' => 'clientes.html', 'texto' => 'Clientes',   'roles' => ['admin', 'vendedor']],
-    ['archivo' => 'pedidos.html', 'texto' => 'Pedidos',     'roles' => ['admin', 'vendedor']],
+    ['archivo' => 'clientes.php', 'texto' => 'Clientes',   'roles' => ['admin', 'vendedor']],
+    ['archivo' => 'pedidos.php', 'texto' => 'Pedidos',     'roles' => ['admin', 'vendedor']],
     ['archivo' => 'reportes.html', 'texto' => 'Reportes',   'roles' => ['admin', 'consultor']],
     ['archivo' => 'usuarios.php', 'texto' => 'Usuarios',    'roles' => ['admin']],
 ];

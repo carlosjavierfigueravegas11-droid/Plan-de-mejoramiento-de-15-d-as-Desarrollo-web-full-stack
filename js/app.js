@@ -13,7 +13,10 @@ if (botonMenu && menuLateral) {
 const tbody = document.querySelector("#tabla-productos tbody");
 const buscador = document.querySelector("#buscador");
 const formProducto = document.querySelector("#form-producto");
-const hayTabla = Boolean(tbody && buscador);
+// Día 13: cuando el servidor renderiza la tabla (paginación, orden y búsqueda
+// de diez en diez), el JavaScript no debe sobrescribirla con la API JSON.
+const esTablaServidor = document.body.hasAttribute("data-tabla-servidor");
+const hayTabla = Boolean(tbody && buscador) && !esTablaServidor;
 
 const sirviendoDelServidor = location.protocol.startsWith("http");
 const API = "app/rutas/productos.php";

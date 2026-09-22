@@ -32,19 +32,19 @@ INSERT INTO productos (id, categoria_id, nombre, precio, stock) VALUES
 (22, 1, 'Webcam 4K',                 350000.00,  4);
 
 -- 12 clientes
-INSERT INTO clientes (id, nombre, correo, telefono) VALUES
-(1,  'Laura Gómez',   'laura.gomez@gmail.com',   '3001234567'),
-(2,  'Andrés Pérez',  'andres.perez@gmail.com',  '3007654321'),
-(3,  'María Torres',  'maria.torres@gmail.com',  '3011112233'),
-(4,  'Carlos Ruiz',   'carlos.ruiz@gmail.com',   '3023334455'),
-(5,  'Lina Castro',   'lina.castro@gmail.com',   '3035556677'),
-(6,  'Pedro Mora',    'pedro.mora@gmail.com',    '3047778899'),
-(7,  'Diana Ríos',    'diana.rios@gmail.com',    '3059990011'),
-(8,  'Jorge Salazar', 'jorge.salazar@gmail.com', '3061112233'),
-(9,  'Paola Núñez',   'paola.nunez@gmail.com',   '3073334455'),
-(10, 'Sergio Vela',   'sergio.vela@gmail.com',   '3085556677'),
-(11, 'Ana Beltrán',   'ana.beltran@gmail.com',   '3097778899'),
-(12, 'Tomás Herrera', 'tomas.herrera@gmail.com', '3119990011');
+INSERT INTO clientes (id, nombre, documento, correo, telefono) VALUES
+(1,  'Laura Gómez',   '1000000001', 'laura.gomez@gmail.com',   '3001234567'),
+(2,  'Andrés Pérez',  '1000000002', 'andres.perez@gmail.com',  '3007654321'),
+(3,  'María Torres',  '1000000003', 'maria.torres@gmail.com',  '3011112233'),
+(4,  'Carlos Ruiz',   '1000000004', 'carlos.ruiz@gmail.com',   '3023334455'),
+(5,  'Lina Castro',   '1000000005', 'lina.castro@gmail.com',   '3035556677'),
+(6,  'Pedro Mora',    '1000000006', 'pedro.mora@gmail.com',    '3047778899'),
+(7,  'Diana Ríos',    '1000000007', 'diana.rios@gmail.com',    '3059990011'),
+(8,  'Jorge Salazar', '1000000008', 'jorge.salazar@gmail.com', '3061112233'),
+(9,  'Paola Núñez',   '1000000009', 'paola.nunez@gmail.com',   '3073334455'),
+(10, 'Sergio Vela',   '1000000010', 'sergio.vela@gmail.com',   '3085556677'),
+(11, 'Ana Beltrán',   '1000000011', 'ana.beltran@gmail.com',   '3097778899'),
+(12, 'Tomás Herrera', '1000000012', 'tomas.herrera@gmail.com', '3119990011');
 
 -- 18 pedidos
 INSERT INTO pedidos (id, cliente_id, fecha, estado) VALUES

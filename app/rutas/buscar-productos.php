@@ -11,7 +11,7 @@ $texto = isset($_GET['q']) ? (string) $_GET['q'] : '';
 $texto = trim($texto);
 
 try {
-    $productos = buscarProductos(Conexion::obtener(), $texto);
+    $productos = (new ProductoModelo(Conexion::obtener()))->listar($texto, 1, 1000);
     echo json_encode($productos, JSON_UNESCAPED_UNICODE);
 } catch (PDOException $e) {
     http_response_code(500);

@@ -34,6 +34,7 @@ CREATE TABLE productos (
 CREATE TABLE clientes (
     id      INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     nombre  VARCHAR(120) NOT NULL,
+    documento VARCHAR(30) NOT NULL UNIQUE,
     correo  VARCHAR(120) NOT NULL UNIQUE,
     telefono VARCHAR(20),
     INDEX idx_clientes_nombre (nombre)
