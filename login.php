@@ -3,12 +3,19 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/app/config/conexion.php';
 require_once __DIR__ . '/app/modelos/UsuarioModelo.php';
+require_once __DIR__ . '/app/seguridad/sesion.php';
 require_once __DIR__ . '/app/seguridad/csrf.php';
 require_once __DIR__ . '/app/seguridad/intentos.php';
 
-session_start();
+iniciarSesionSegura();
 
 $error = '';
+$m = isset($_GET['m']) ? (string) $_GET['m'] : '';
+
+if ($m === 'requiere_ingreso')    $error = 'Debes iniciar sesión para ver esa página.';
+if ($m === 'sesion_invalida')     $error = 'Tu sesión se cerró por cambio en el navegador.';
+if ($m === 'sesion_expirada')     $error = 'Tu sesión expiró por inactividad. Inicia sesión de nuevo.';
+if ($m === 'cerrada')             $error = 'Sesión cerrada correctamente.';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validarCsrf($_POST['csrf'] ?? null)) {
@@ -38,11 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 registrarIntento($pdo, $correo, true);
 
-                session_regenerate_id(true);
-                $_SESSION['usuario_id'] = (int) $u['id'];
-                $_SESSION['usuario_nombre'] = $u['nombre'];
-                $_SESSION['usuario_correo'] = $u['correo'];
-                $_SESSION['usuario_rol'] = $u['rol'];
+                abrirSesion($u); // regenera el ID: evita fijación de sesión
 
                 header('Location: dashboard.php');
                 exit;

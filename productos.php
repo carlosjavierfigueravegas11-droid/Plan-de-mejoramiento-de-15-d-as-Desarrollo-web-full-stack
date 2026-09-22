@@ -1,3 +1,20 @@
+<?php
+declare(strict_types=1);
+
+require_once __DIR__ . '/app/seguridad/guardia.php';
+require_once __DIR__ . '/app/config/conexion.php';
+
+$bdDisponible = false;
+try {
+    Conexion::obtener();
+    $bdDisponible = true;
+} catch (PDOException $_) {
+    $bdDisponible = false;
+}
+
+$puedeEditar = puede('admin', 'vendedor');    // crear y editar productos
+$puedeEliminar = puede('admin');              // eliminar registros
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,17 +24,7 @@
     <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body class="panel">
-    <?php
-    require_once __DIR__ . '/app/config/conexion.php';
-    $bdDisponible = false;
-    try {
-        Conexion::obtener();
-        $bdDisponible = true;
-    } catch (PDOException $_) {
-        $bdDisponible = false;
-    }
-    ?>
+<body class="panel" <?= $puedeEditar ? 'data-puede-editar="1"' : 'data-puede-editar="0"' ?> <?= $puedeEliminar ? 'data-puede-eliminar="1"' : 'data-puede-eliminar="0"' ?>>
     <header class="encabezado barra">
         <div class="encabezado-marca">
             <button type="button" class="boton-menu" id="boton-menu" aria-controls="menu-lateral" aria-expanded="false">Menú</button>
@@ -25,20 +32,25 @@
             <p class="nombre-sitio">ISoT — Panel de gestión</p>
         </div>
         <div class="usuario">
-            <span>J. Zambrano · Administrador</span>
-            <a href="login.html">Cerrar sesión</a>
+            <span><?= htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8') ?> · <?= htmlspecialchars($usuario['rol'], ENT_QUOTES, 'UTF-8') ?></span>
+            <a href="salir.php">Cerrar sesión</a>
         </div>
     </header>
 
     <aside class="menu" id="menu-lateral">
         <nav aria-label="Menú principal">
             <ul>
-                <li><a href="dashboard.html">Tablero</a></li>
-                <li><a href="productos.php" class="activo">Productos</a></li>
-                <li><a href="categorias.html">Categorías</a></li>
-                <li><a href="clientes.html">Clientes</a></li>
-                <li><a href="pedidos.html">Pedidos</a></li>
+                <li><a href="dashboard.php">Tablero</a></li>
+                <li><a href="productos.php" class="activo" aria-current="page">Productos</a></li>
+                <?php if ($puedeEditar): ?>
+                    <li><a href="categorias.html">Categorías</a></li>
+                    <li><a href="clientes.html">Clientes</a></li>
+                    <li><a href="pedidos.html">Pedidos</a></li>
+                <?php endif; ?>
                 <li><a href="reportes.html">Reportes</a></li>
+                <?php if ($puedeEliminar): ?>
+                    <li><a href="usuarios.php">Usuarios</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
     </aside>
@@ -72,6 +84,7 @@
             </table>
         </section>
 
+        <?php if ($puedeEditar): ?>
         <section class="formulario">
             <h2>Registro de producto</h2>
             <form action="productos.php" method="post" id="form-producto" novalidate>
@@ -104,6 +117,7 @@
                 <button type="submit">Guardar producto</button>
             </form>
         </section>
+        <?php endif; ?>
     </main>
 
     <footer class="pie">

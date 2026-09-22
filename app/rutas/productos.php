@@ -5,7 +5,18 @@ header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 
 require_once dirname(__DIR__) . '/config/conexion.php';
+require_once dirname(__DIR__) . '/seguridad/sesion.php';
 require_once dirname(__DIR__) . '/modelos/ProductoModelo.php';
+
+iniciarSesionSegura();
+
+if (usuarioActual() === null) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Debes iniciar sesión.']);
+    exit;
+}
+
+$rol = $_SESSION['usuario']['rol'] ?? '';
 
 try {
     $pdo = Conexion::obtener();
@@ -18,6 +29,20 @@ try {
             ? listarProductos($pdo)
             : buscarProductos($pdo, $q);
         echo json_encode($productos, JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    // ESCRITURA: crear y editar requieren admin o vendedor
+    if (($metodo === 'POST' || $metodo === 'PUT') && !in_array($rol, ['admin', 'vendedor'], true)) {
+        http_response_code(403);
+        echo json_encode(['error' => 'No tiene permiso para modificar productos.']);
+        exit;
+    }
+
+    // ELIMINAR: solo admin
+    if ($metodo === 'DELETE' && $rol !== 'admin') {
+        http_response_code(403);
+        echo json_encode(['error' => 'Solo un administrador puede eliminar.']);
         exit;
     }
 

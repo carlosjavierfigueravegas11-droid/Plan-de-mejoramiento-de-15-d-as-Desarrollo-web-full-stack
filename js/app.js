@@ -9,10 +9,16 @@ if (botonMenu && menuLateral) {
 const tbody = document.querySelector("#tabla-productos tbody");
 const buscador = document.querySelector("#buscador");
 const formProducto = document.querySelector("#form-producto");
-const hayTabla = Boolean(tbody && buscador && formProducto);
+const hayTabla = Boolean(tbody && buscador);
 
 const sirviendoDelServidor = location.protocol.startsWith("http");
 const API = "app/rutas/productos.php";
+const puedeEditar = document.body.hasAttribute("data-puede-editar")
+  ? document.body.dataset.puedeEditar === "1"
+  : true;
+const puedeEliminar = document.body.hasAttribute("data-puede-eliminar")
+  ? document.body.dataset.puedeEliminar === "1"
+  : true;
 let datos = [];
 let editandoId = null;
 
@@ -35,22 +41,29 @@ function plantillaProducto(p) {
   tr.append(celda(moneda.format(p.precio), "Precio"));
   tr.append(celda(p.stock, "Stock"));
 
-  const acciones = document.createElement("td");
-  acciones.dataset.label = "Acciones";
-  const btnEditar = document.createElement("button");
-  btnEditar.type = "button";
-  btnEditar.className = "boton-mini";
-  btnEditar.dataset.accion = "editar";
-  btnEditar.dataset.id = String(p.id);
-  btnEditar.textContent = "Editar";
-  const btnEliminar = document.createElement("button");
-  btnEliminar.type = "button";
-  btnEliminar.className = "boton-mini boton-peligro";
-  btnEliminar.dataset.accion = "eliminar";
-  btnEliminar.dataset.id = String(p.id);
-  btnEliminar.textContent = "Eliminar";
-  acciones.append(btnEditar, btnEliminar);
-  tr.append(acciones);
+  if (puedeEditar || puedeEliminar) {
+    const acciones = document.createElement("td");
+    acciones.dataset.label = "Acciones";
+    if (puedeEditar) {
+      const btnEditar = document.createElement("button");
+      btnEditar.type = "button";
+      btnEditar.className = "boton-mini";
+      btnEditar.dataset.accion = "editar";
+      btnEditar.dataset.id = String(p.id);
+      btnEditar.textContent = "Editar";
+      acciones.append(btnEditar);
+    }
+    if (puedeEliminar) {
+      const btnEliminar = document.createElement("button");
+      btnEliminar.type = "button";
+      btnEliminar.className = "boton-mini boton-peligro";
+      btnEliminar.dataset.accion = "eliminar";
+      btnEliminar.dataset.id = String(p.id);
+      btnEliminar.textContent = "Eliminar";
+      acciones.append(btnEliminar);
+    }
+    tr.append(acciones);
+  }
 
   return tr;
 }
