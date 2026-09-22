@@ -1,0 +1,108 @@
+/* Día 15 — Reportes formales: estilos de pantalla y de impresión (PDF).
+ *
+ * @media print:
+ *  - se oculta el menú lateral y la cabecera del panel (solo queda el reporte);
+ *  - @page define márgenes y formato A4;
+ *  - print-color-adjust/color-adjust fuerza los colores del logo y las tablas;
+ *  - break-inside: avoid evita que una fila o el gráfico queden partidos;
+ *  - los thead se repiten al pasar a la segunda página (riesgo de cortar filas).
+ */
+
+/* ---------- pantalla ---------- */
+.reporte { max-width: 1100px; }
+
+.reporte-toolbar form { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: end; }
+.reporte-toolbar .linea-pedido { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: end; }
+
+.reporte-encabezado {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    border-bottom: 2px solid var(--acento);
+    padding: 1rem 0 0.75rem;
+    margin-bottom: 1rem;
+}
+.reporte-marca { display: flex; align-items: center; gap: 0.75rem; }
+.reporte-marca img { width: 96px; height: 34px; object-fit: contain; }
+.reporte-software { font-weight: 700; color: var(--acento); margin: 0; }
+.reporte-empresa { font-size: 0.8rem; color: #666; margin: 0; }
+.reporte-titulo { text-align: center; }
+.reporte-titulo h2 { margin: 0; font-size: 1.35rem; }
+.reporte-titulo p { margin: 0; font-size: 0.85rem; color: #666; }
+.reporte-datos { display: grid; gap: 0.25rem; font-size: 0.8rem; margin: 0; }
+.reporte-datos > div { display: flex; gap: 0.4rem; }
+.reporte-datos dt { font-weight: 700; }
+.reporte-datos dd { margin: 0; text-align: right; }
+
+.reporte-grafico {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin: 1rem 0;
+    break-inside: avoid;
+}
+.reporte-vacio { color: #666; font-style: italic; }
+
+.tabla-reporte { width: 100%; break-inside: auto; }
+.tabla-reporte table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.tabla-reporte caption { text-align: left; font-weight: 700; margin-bottom: 0.5rem; }
+.tabla-reporte th, .tabla-reporte td {
+    border: 1px solid #ccc;
+    padding: 0.45rem 0.6rem;
+    text-align: left;
+}
+.tabla-reporte thead th { background: var(--acento); color: #1a1a1a; }
+.tabla-reporte tfoot th,
+.tabla-reporte tfoot td { background: #f2f2f2; font-weight: 700; }
+.numero, td[class="numero"] { text-align: right !important; white-space: nowrap; }
+.reporte-encabezado, .tabla-reporte tr, .tabla-reporte tfoot { break-inside: avoid; }
+
+.reporte-acciones { display: flex; gap: 0.75rem; margin: 1rem 0; }
+.reporte-pie {
+    margin-top: 1.5rem;
+    border-top: 1px solid #ccc;
+    padding-top: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: #666;
+    break-inside: avoid;
+}
+.reporte-confidencial { margin: 0; }
+.reporte-paginacion { margin: 0; }
+
+/* ---------- impresión ---------- */
+@media print {
+    @page {
+        size: A4;
+        margin: 12mm 10mm;
+    }
+
+    html, body { background: #fff !important; }
+
+    /* Ocultar la navegación y cabecera del panel: solo debe quedar el reporte. */
+    .menu, .encabezado.barra, .reporte-toolbar, .reporte-acciones,
+    .pie, #form-pdf { display: none !important; }
+
+    .contenido { max-width: none; margin: 0; padding: 0; }
+    body.panel { grid-template-columns: 1fr; }
+
+    /* Forzar colores: logo y fondos NO deben desaparecer en papel/PDF. */
+    .reporte-encabezado, .tabla-reporte thead th,
+    .tabla-reporte tfoot th, .tabla-reporte tfoot td {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Repetir el encabezado de la tabla en todas las páginas. */
+    .tabla-reporte thead { display: table-header-group; }
+
+    /* Ninguna fila cortada ni gráfico partido. */
+    .tabla-reporte tr, .tabla-reporte tfoot, .tabla-reporte tbody {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .reporte-grafico { break-inside: avoid; }
+    .reporte-pie { position: running(footer); }
+}

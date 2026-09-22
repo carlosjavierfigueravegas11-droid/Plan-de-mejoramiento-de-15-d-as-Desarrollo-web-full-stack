@@ -1,2 +1,5 @@
 # Día 9 — Credenciales locales fuera del repositorio
 app/config/credenciales.php
+
+# Día 15 — dependencias de Composer (Dompdf para exportar a PDF)
+vendor/
