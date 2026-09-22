@@ -44,6 +44,15 @@ $recientes = $pdo->query(
      FROM v_pedidos_recientes LIMIT 8"
 )->fetchAll();
 
+// Ranking de clientes con mayor compra acumulada (día 14).
+$mejoresClientes = $pdo->query(
+    "SELECT cliente_id, cliente, documento, cantidad_pedidos, total_comprado
+     FROM v_clientes_mayor_compra
+     WHERE total_comprado > 0
+     ORDER BY total_comprado DESC
+     LIMIT 5"
+)->fetchAll();
+
 $resumenStmt = $pdo->prepare(
     "SELECT
         (SELECT COUNT(*) FROM productos WHERE activo = 1) AS productos_activos,
@@ -89,4 +98,5 @@ echo json_encode([
     ],
     'stockCritico' => $stockCritico,
     'recientes'   => $recientes,
+    'mejoresClientes' => $mejoresClientes,
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

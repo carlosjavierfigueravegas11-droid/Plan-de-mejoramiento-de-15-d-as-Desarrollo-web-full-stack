@@ -246,6 +246,26 @@
       '<tbody>' + filas + '</tbody></table>';
   }
 
+  function pintarMejoresClientes(datos) {
+    var caja = document.getElementById('mejores-clientes-lista');
+    if (!caja) return;
+    if (!datos.mejoresClientes || !datos.mejoresClientes.length) {
+      caja.innerHTML = '<p>Sin ventas en el periodo.</p>';
+      return;
+    }
+    var filas = datos.mejoresClientes.map(function (cl, i) {
+      return '<tr><td class="reciente-puesto">' + (i + 1) + '</td>' +
+        '<td>' + cl.cliente + '</td>' +
+        '<td class="reciente-num">' + cl.cantidad_pedidos + '</td>' +
+        '<td class="reciente-total">' + formatoPeso.format(Number(cl.total_comprado)) + '</td></tr>';
+    }).join('');
+    caja.innerHTML =
+      '<h3>Clientes con mayor compra</h3>' +
+      '<table><caption>Mejores clientes por compra acumulada</caption>' +
+      '<thead><tr><th>#</th><th>Cliente</th><th>Pedidos</th><th>Total acumulado</th></tr></thead>' +
+      '<tbody>' + filas + '</tbody></table>';
+  }
+
   function pintarStock(datos) {
     var caja = document.getElementById('stock-critico-lista');
     if (!caja) return;
@@ -278,6 +298,7 @@
     if (cPedidos) graficoLineaPedidos(cPedidos, datos);
     if (cArea) graficoAreaVentas(cArea, datos);
     pintarRecientes(datos);
+    pintarMejoresClientes(datos);
     pintarStock(datos);
     pintarSello(datos);
     pintarContadores(datos);

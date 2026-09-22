@@ -781,6 +781,8 @@ input:disabled, select:disabled {
 .reciente-cliente { font-weight: 700; }
 .reciente-fecha, .reciente-total { white-space: nowrap; }
 .reciente-total { text-align: right; }
+.reciente-puesto { font-weight: 700; color: var(--acento); width: 2.5rem; }
+.reciente-num { text-align: right; }
 .stock-bajo { font-weight: 700; color: var(--error); }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,101 @@
+{
+  "rango": 30,
+  "generado": "17:24:44",
+  "resumen": {
+    "productos": 22,
+    "pedidos": 17,
+    "ventas": 6740000,
+    "stock": 7
+  },
+  "ventasMes": [
+    "2026-09"
+  ],
+  "categorias": [
+    "Pantallas",
+    "Almacenamiento",
+    "Redes",
+    "Audio",
+    "Periféricos"
+  ],
+  "mejoresClientes": [
+    {
+      "cliente_id": 1,
+      "cliente": "Laura Gómez",
+      "documento": "1000000001",
+      "cantidad_pedidos": 2,
+      "total_comprado": "2855000.00"
+    },
+    {
+      "cliente_id": 5,
+      "cliente": "Lina Castro",
+      "documento": "1000000005",
+      "cantidad_pedidos": 2,
+      "total_comprado": "1060000.00"
+    },
+    {
+      "cliente_id": 2,
+      "cliente": "Andrés Pérez",
+      "documento": "1000000002",
+      "cantidad_pedidos": 2,
+      "total_comprado": "980000.00"
+    },
+    {
+      "cliente_id": 8,
+      "cliente": "Jorge Salazar",
+      "documento": "1000000008",
+      "cantidad_pedidos": 2,
+      "total_comprado": "490000.00"
+    },
+    {
+      "cliente_id": 6,
+      "cliente": "Pedro Mora",
+      "documento": "1000000006",
+      "cantidad_pedidos": 2,
+      "total_comprado": "320000.00"
+    }
+  ],
+  "stockCritico": [
+    {
+      "id": 10,
+      "nombre": "Monitor 27\" 2K",
+      "categoria": "Pantallas",
+      "stock": 0
+    },
+    {
+      "id": 15,
+      "nombre": "UPS 650 VA",
+      "categoria": "Redes",
+      "stock": 2
+    },
+    {
+      "id": 8,
+      "nombre": "Switch 8 puertos",
+      "categoria": "Redes",
+      "stock": 3
+    },
+    {
+      "id": 18,
+      "nombre": "Monitor 32\" QHD",
+      "categoria": "Pantallas",
+      "stock": 3
+    },
+    {
+      "id": 1,
+      "nombre": "Teclado mecánico RGB",
+      "categoria": "Periféricos",
+      "stock": 4
+    },
+    {
+      "id": 11,
+      "nombre": "Disco duro 1 TB",
+      "categoria": "Almacenamiento",
+      "stock": 4
+    },
+    {
+      "id": 22,
+      "nombre": "Webcam 4K",
+      "categoria": "Periféricos",
+      "stock": 4
+    }
+  ]
+}

@@ -120,6 +120,8 @@ $indicadores = $pdo->query($sql)->fetch();
                 <div id="pedidos-recientes"></div>
             </article>
 
+            <article class="grafico grafico--ancho" id="mejores-clientes-lista"></article>
+
             <article class="grafico grafico--ancho" id="stock-critico-lista"></article>
         </section>
 

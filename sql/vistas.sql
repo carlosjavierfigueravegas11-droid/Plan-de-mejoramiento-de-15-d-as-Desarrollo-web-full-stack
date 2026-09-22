@@ -69,3 +69,17 @@ SELECT pr.id, pr.nombre, c.nombre AS categoria, pr.stock
 FROM productos pr
 INNER JOIN categorias c ON c.id = pr.categoria_id
 WHERE pr.activo = 1 AND pr.stock < 5;
+
+-- Clientes con mayor compra acumulada (ranking de mejor cliente en pesos).
+-- LEFT JOIN para que también se listeen los clientes que aún no compran.
+CREATE OR REPLACE VIEW v_clientes_mayor_compra AS
+SELECT
+    c.id          AS cliente_id,
+    c.nombre      AS cliente,
+    c.documento   AS documento,
+    COUNT(DISTINCT p.id) AS cantidad_pedidos,
+    COALESCE(SUM(dp.cantidad * dp.precio_unitario), 0) AS total_comprado
+FROM clientes c
+LEFT JOIN pedidos p ON p.cliente_id = c.id AND p.estado <> 'cancelado'
+LEFT JOIN detalle_pedidos dp ON dp.pedido_id = p.id
+GROUP BY c.id, c.nombre, c.documento;
