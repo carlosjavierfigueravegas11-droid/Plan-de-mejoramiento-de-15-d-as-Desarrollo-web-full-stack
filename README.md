@@ -44,19 +44,28 @@ roles) y un tablero de gestión alimentado por vistas SQL y gráficos Chart.js.
 ```
 ├── api/                 # JSON del tablero y exportaciones (CSV y PDF)
 ├── app/
-│   ├── config/          # app.php (datos del software) y conexión PDO
-│   ├── controladores/   # lógica por módulo
+│   ├── config/          # app.php (datos del software, rutas públicas) y conexión PDO
+│   ├── controladores/   # lógica pura: salir, logout (y diagnósticos)
 │   ├── modelos/         # acceso a datos (Producto, Cliente, Pedido, Reporte)
 │   ├── rutas/           # endpoints POST (PRG)
 │   ├── seguridad/       # guardia de acceso, CSRF, sesión, avisos
-│   └── vistas/          # plantillas: parciales y reportes reutilizables
+│   └── vistas/
+│       ├── paginas/     # vistas de los módulos (login, tablero, CRUD, reportes)
+│       ├── parciales/   # cabecera, menú, pie y encabezado del tablero
+│       └── reportes/    # HTML reutilizable de los reportes formales
+├── maquetas/            # prototipos HTML estáticos (incluye movil/)
 ├── assets/img/          # logo en SVG (pantalla) y PNG (PDF)
 ├── css/                 # tokens, estilos del panel y reporte (impresión)
 ├── js/                  # graficos.js, reportes.js y vendor/Chart.js
 ├── sql/                 # estructura, datos, vistas y reset de semilla
-├── *.php                # vistas de módulos en la raíz pública
 └── CAPTURAS/, ACTIVIDADES/, BITACORA/   # evidencias del plan
 ```
+
+> Reorden MVC/2026: las páginas públicas ahora viven en `app/vistas/paginas/`
+> (`/app/vistas/paginas/…php`), la lógica sin HTML en `app/controladores/` y
+> los prototipos HTML estáticos en `maquetas/`. Los enlaces del menú, los
+> formularios y las redirecciones usan las constantes `RUTA_PAGINAS` y
+> `RUTA_CONTROLADORES` de `app/config/app.php` (`urlPagina()` / `urlControlador()`).
 
 ## Reportes (Día 15)
 

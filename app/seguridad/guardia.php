@@ -24,7 +24,7 @@ function redirigirAPorFallo(string $mensaje): void
         echo json_encode(['error' => $mensaje]);
         exit;
     }
-    header('Location: ' . BASE_URL . 'login.php?m=' . $mensaje);
+    header('Location: ' . urlPagina('login.php') . '?m=' . $mensaje);
     exit;
 }
 

@@ -10,13 +10,13 @@ declare(strict_types=1);
  * borrado lógico que no rompe la integridad referencial.
  */
 
-require_once __DIR__ . '/app/seguridad/guardia.php';
-require_once __DIR__ . '/app/seguridad/csrf.php';
-require_once __DIR__ . '/app/seguridad/aviso.php';
-require_once __DIR__ . '/app/config/conexion.php';
-require_once __DIR__ . '/app/modelos/ProductoModelo.php';
-require_once __DIR__ . '/app/modelos/ClienteModelo.php';
-require_once __DIR__ . '/app/modelos/PedidoModelo.php';
+require_once __DIR__ . '/../../../app/seguridad/guardia.php';
+require_once __DIR__ . '/../../../app/seguridad/csrf.php';
+require_once __DIR__ . '/../../../app/seguridad/aviso.php';
+require_once __DIR__ . '/../../../app/config/conexion.php';
+require_once __DIR__ . '/../../../app/modelos/ProductoModelo.php';
+require_once __DIR__ . '/../../../app/modelos/ClienteModelo.php';
+require_once __DIR__ . '/../../../app/modelos/PedidoModelo.php';
 
 if (!puede('admin', 'vendedor')) {
     http_response_code(403);
@@ -49,8 +49,8 @@ try {
     <link rel="stylesheet" href="<?= BASE_URL ?>css/estilos.css">
 </head>
 <body class="panel">
-    <?php require __DIR__ . '/app/vistas/parciales/cabecera.php'; ?>
-    <?php require __DIR__ . '/app/vistas/parciales/menu.php'; ?>
+    <?php require __DIR__ . '/../parciales/cabecera.php'; ?>
+    <?php require __DIR__ . '/../parciales/menu.php'; ?>
 
     <main class="contenido">
         <h1>Pedidos</h1>
@@ -159,6 +159,6 @@ try {
         </section>
     </main>
 
-    <?php require __DIR__ . '/app/vistas/parciales/pie.php'; ?>
+    <?php require __DIR__ . '/../parciales/pie.php'; ?>
 </body>
 </html>

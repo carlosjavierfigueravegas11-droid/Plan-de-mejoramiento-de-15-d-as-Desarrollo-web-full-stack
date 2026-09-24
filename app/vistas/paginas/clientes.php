@@ -8,11 +8,11 @@ declare(strict_types=1);
  * con pedidos no se puede borrar. Paginación de diez y orden por lista blanca.
  */
 
-require_once __DIR__ . '/app/seguridad/guardia.php';
-require_once __DIR__ . '/app/seguridad/csrf.php';
-require_once __DIR__ . '/app/seguridad/aviso.php';
-require_once __DIR__ . '/app/config/conexion.php';
-require_once __DIR__ . '/app/modelos/ClienteModelo.php';
+require_once __DIR__ . '/../../../app/seguridad/guardia.php';
+require_once __DIR__ . '/../../../app/seguridad/csrf.php';
+require_once __DIR__ . '/../../../app/seguridad/aviso.php';
+require_once __DIR__ . '/../../../app/config/conexion.php';
+require_once __DIR__ . '/../../../app/modelos/ClienteModelo.php';
 
 $esUsuario = puede('admin', 'vendedor');     // crear y editar clientes
 if (!$esUsuario) {
@@ -71,8 +71,8 @@ try {
     <link rel="stylesheet" href="<?= BASE_URL ?>css/estilos.css">
 </head>
 <body class="panel" data-tabla-servidor>
-    <?php require __DIR__ . '/app/vistas/parciales/cabecera.php'; ?>
-    <?php require __DIR__ . '/app/vistas/parciales/menu.php'; ?>
+    <?php require __DIR__ . '/../parciales/cabecera.php'; ?>
+    <?php require __DIR__ . '/../parciales/menu.php'; ?>
 
     <main class="contenido">
         <h1>Clientes</h1>
@@ -94,7 +94,7 @@ try {
                 · Página <?= $pagina ?> de <?= $totalPaginas ?> · <?= htmlspecialchars((string) $total, ENT_QUOTES, 'UTF-8') ?> cliente(s)
             </p>
 
-            <form method="get" action="clientes.php" class="buscador" role="search">
+            <form method="get" action="<?= urlPagina('clientes.php') ?>" class="buscador" role="search">
                 <label for="buscador" class="oculto">Buscar cliente</label>
                 <input type="search" id="buscador" name="q" class="buscador" value="<?= htmlspecialchars($q, ENT_QUOTES, 'UTF-8') ?>"
                        placeholder="Filtrar por nombre, documento o correo">
@@ -110,7 +110,7 @@ try {
                             <?php foreach (['nombre' => 'Nombre', 'documento' => 'Documento', 'correo' => 'Correo', 'telefono' => 'Teléfono'] as $campo => $etiqueta): ?>
                                 <th scope="col">
                                     <?php $activo = $orden === $campo; $dirSig = $orden === $campo && $direccion === 'ASC' ? 'desc' : 'asc'; ?>
-                                    <a href="clientes.php?q=<?= urlencode($q) ?>&pagina=1&orden=<?= $campo ?>&dir=<?= $dirSig ?>">
+                                    <a href="<?= urlPagina('clientes.php') ?>?q=<?= urlencode($q) ?>&pagina=1&orden=<?= $campo ?>&dir=<?= $dirSig ?>">
                                         <?= $etiqueta ?><?= $activo ? ($direccion === 'ASC' ? ' ↑' : ' ↓') : '' ?>
                                     </a>
                                 </th>
@@ -142,17 +142,17 @@ try {
                 <?php if ($totalPaginas > 1): ?>
                     <nav class="paginador" aria-label="Paginación">
                         <?php if ($pagina > 1): ?>
-                            <a href="clientes.php?q=<?= urlencode($q) ?>&pagina=<?= $pagina - 1 ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>">← Anterior</a>
+                            <a href="<?= urlPagina('clientes.php') ?>?q=<?= urlencode($q) ?>&pagina=<?= $pagina - 1 ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>">← Anterior</a>
                         <?php endif; ?>
                         <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
                             <?php if ($i === $pagina): ?>
                                 <span class="paginador-actual" aria-current="page"><?= $i ?></span>
                             <?php else: ?>
-                                <a href="clientes.php?q=<?= urlencode($q) ?>&pagina=<?= $i ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>"><?= $i ?></a>
+                                <a href="<?= urlPagina('clientes.php') ?>?q=<?= urlencode($q) ?>&pagina=<?= $i ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>"><?= $i ?></a>
                             <?php endif; ?>
                         <?php endfor; ?>
                         <?php if ($pagina < $totalPaginas): ?>
-                            <a href="clientes.php?q=<?= urlencode($q) ?>&pagina=<?= $pagina + 1 ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>">Siguiente →</a>
+                            <a href="<?= urlPagina('clientes.php') ?>?q=<?= urlencode($q) ?>&pagina=<?= $pagina + 1 ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>">Siguiente →</a>
                         <?php endif; ?>
                     </nav>
                 <?php endif; ?>
@@ -193,13 +193,13 @@ try {
                 </fieldset>
                 <button type="submit"><?= $editando ? 'Guardar cambios' : 'Guardar cliente' ?></button>
                 <?php if ($editando): ?>
-                    <p class="nota-edicion"><a href="clientes.php">Cancelar edición</a></p>
+                    <p class="nota-edicion"><a href="<?= urlPagina('clientes.php') ?>">Cancelar edición</a></p>
                 <?php endif; ?>
             </form>
         </section>
     </main>
 
-    <?php require __DIR__ . '/app/vistas/parciales/pie.php'; ?>
+    <?php require __DIR__ . '/../parciales/pie.php'; ?>
     <script src="<?= BASE_URL ?>js/app.js"></script>
 </body>
 </html>

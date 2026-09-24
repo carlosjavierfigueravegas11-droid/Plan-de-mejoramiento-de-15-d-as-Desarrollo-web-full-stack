@@ -10,11 +10,11 @@ declare(strict_types=1);
  * blanca. Botones de fila con data-id (día 8) y acciones por POST (nunca GET).
  */
 
-require_once __DIR__ . '/app/seguridad/guardia.php';
-require_once __DIR__ . '/app/seguridad/csrf.php';
-require_once __DIR__ . '/app/seguridad/aviso.php';
-require_once __DIR__ . '/app/config/conexion.php';
-require_once __DIR__ . '/app/modelos/ProductoModelo.php';
+require_once __DIR__ . '/../../../app/seguridad/guardia.php';
+require_once __DIR__ . '/../../../app/seguridad/csrf.php';
+require_once __DIR__ . '/../../../app/seguridad/aviso.php';
+require_once __DIR__ . '/../../../app/config/conexion.php';
+require_once __DIR__ . '/../../../app/modelos/ProductoModelo.php';
 
 $puedeEditar = puede('admin', 'vendedor');   // crear y editar productos
 $puedeEliminar = puede('admin');             // borrar (lógico) productos
@@ -63,7 +63,7 @@ try {
     $categorias = [];
 }
 
-$enlaceBase = 'productos.php?q=' . urlencode($q) . '&pagina=' . $pagina;
+$enlaceBase = urlPagina('productos.php') . '?q=' . urlencode($q) . '&pagina=' . $pagina;
 $columnaSiguiente = $direccion === 'ASC' ? 'desc' : 'asc';
 
 function thOrdenable(string $etiqueta, string $campo, string $orden, string $direccion, string $enlaceBase): string
@@ -74,7 +74,7 @@ function thOrdenable(string $etiqueta, string $campo, string $orden, string $dir
     if ($activa) {
         $flecha = $direccion === 'ASC' ? ' ↑' : ' ↓';
     }
-    $href = 'productos.php?q=' . urlencode($_GET['q'] ?? '') . '&pagina=1&orden=' . $campo . '&dir=' . $columnaSiguiente;
+    $href = urlPagina('productos.php') . '?q=' . urlencode($_GET['q'] ?? '') . '&pagina=1&orden=' . $campo . '&dir=' . $columnaSiguiente;
 
     return '<th scope="col"><a href="' . htmlspecialchars($href, ENT_QUOTES, 'UTF-8') . '">'
         . htmlspecialchars($etiqueta, ENT_QUOTES, 'UTF-8') . $flecha . '</a></th>';
@@ -90,8 +90,8 @@ function thOrdenable(string $etiqueta, string $campo, string $orden, string $dir
     <link rel="stylesheet" href="<?= BASE_URL ?>css/estilos.css">
 </head>
 <body class="panel" data-tabla-servidor>
-    <?php require __DIR__ . '/app/vistas/parciales/cabecera.php'; ?>
-    <?php require __DIR__ . '/app/vistas/parciales/menu.php'; ?>
+    <?php require __DIR__ . '/../parciales/cabecera.php'; ?>
+    <?php require __DIR__ . '/../parciales/menu.php'; ?>
 
     <main class="contenido">
         <h1>Productos</h1>
@@ -113,7 +113,7 @@ function thOrdenable(string $etiqueta, string $campo, string $orden, string $dir
                 · Página <?= $pagina ?> de <?= $totalPaginas ?> · <?= htmlspecialchars((string) $total, ENT_QUOTES, 'UTF-8') ?> producto(s)
             </p>
 
-            <form method="get" action="productos.php" class="buscador" role="search">
+            <form method="get" action="<?= urlPagina('productos.php') ?>" class="buscador" role="search">
                 <label for="buscador" class="oculto">Buscar producto</label>
                 <input type="search" id="buscador" name="q" class="buscador" value="<?= htmlspecialchars($q, ENT_QUOTES, 'UTF-8') ?>"
                        placeholder="Filtrar por nombre o categoría">
@@ -165,17 +165,17 @@ function thOrdenable(string $etiqueta, string $campo, string $orden, string $dir
                 <?php if ($totalPaginas > 1): ?>
                     <nav class="paginador" aria-label="Paginación">
                         <?php if ($pagina > 1): ?>
-                            <a href="productos.php?q=<?= urlencode($q) ?>&pagina=<?= $pagina - 1 ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>">← Anterior</a>
+                            <a href="<?= urlPagina('productos.php') ?>?q=<?= urlencode($q) ?>&pagina=<?= $pagina - 1 ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>">← Anterior</a>
                         <?php endif; ?>
                         <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
                             <?php if ($i === $pagina): ?>
                                 <span class="paginador-actual" aria-current="page"><?= $i ?></span>
                             <?php else: ?>
-                                <a href="productos.php?q=<?= urlencode($q) ?>&pagina=<?= $i ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>"><?= $i ?></a>
+                                <a href="<?= urlPagina('productos.php') ?>?q=<?= urlencode($q) ?>&pagina=<?= $i ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>"><?= $i ?></a>
                             <?php endif; ?>
                         <?php endfor; ?>
                         <?php if ($pagina < $totalPaginas): ?>
-                            <a href="productos.php?q=<?= urlencode($q) ?>&pagina=<?= $pagina + 1 ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>">Siguiente →</a>
+                            <a href="<?= urlPagina('productos.php') ?>?q=<?= urlencode($q) ?>&pagina=<?= $pagina + 1 ?>&orden=<?= $orden ?>&dir=<?= $direccion ?>">Siguiente →</a>
                         <?php endif; ?>
                     </nav>
                 <?php endif; ?>
@@ -223,14 +223,14 @@ function thOrdenable(string $etiqueta, string $campo, string $orden, string $dir
                 </fieldset>
                 <button type="submit"><?= $editando ? 'Guardar cambios' : 'Guardar producto' ?></button>
                 <?php if ($editando): ?>
-                    <p class="nota-edicion"><a href="productos.php">Cancelar edición</a></p>
+                    <p class="nota-edicion"><a href="<?= urlPagina('productos.php') ?>">Cancelar edición</a></p>
                 <?php endif; ?>
             </form>
         </section>
         <?php endif; ?>
     </main>
 
-    <?php require __DIR__ . '/app/vistas/parciales/pie.php'; ?>
+    <?php require __DIR__ . '/../parciales/pie.php'; ?>
     <script src="<?= BASE_URL ?>js/app.js"></script>
     <script src="<?= BASE_URL ?>js/editar-tabla.js"></script>
 </body>

@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/app/config/conexion.php';
-require_once __DIR__ . '/app/modelos/UsuarioModelo.php';
-require_once __DIR__ . '/app/seguridad/sesion.php';
-require_once __DIR__ . '/app/seguridad/csrf.php';
-require_once __DIR__ . '/app/seguridad/intentos.php';
+require_once __DIR__ . '/../../../app/config/app.php';
+require_once __DIR__ . '/../../../app/config/conexion.php';
+require_once __DIR__ . '/../../../app/modelos/UsuarioModelo.php';
+require_once __DIR__ . '/../../../app/seguridad/sesion.php';
+require_once __DIR__ . '/../../../app/seguridad/csrf.php';
+require_once __DIR__ . '/../../../app/seguridad/intentos.php';
 
 iniciarSesionSegura();
 
@@ -47,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 abrirSesion($u); // regenera el ID: evita fijación de sesión
 
-                header('Location: dashboard.php');
+                header('Location: ' . urlPagina('dashboard.php'));
                 exit;
             } else {
                 registrarIntento($pdo, $correo, false);
@@ -69,13 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ingreso — ISoT</title>
-    <link rel="stylesheet" href="css/tokens.css">
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/tokens.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/estilos.css">
 </head>
 <body>
     <main class="pantalla-ingreso">
         <section class="marca">
-            <img src="assets/img/logo.svg" alt="Logo de ISoT" width="200">
+            <img src="<?= BASE_URL ?>assets/img/logo.svg" alt="Logo de ISoT" width="200">
             <h1>Panel de gestión</h1>
             <p>Administra tu inventario, tus ventas y tus reportes en un solo lugar.</p>
         </section>
@@ -87,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
                 </p>
             <?php endif; ?>
-            <form method="post" action="login.php" novalidate>
+            <form method="post" action="<?= urlPagina('login.php') ?>" novalidate>
                 <input type="hidden" name="csrf" value="<?= htmlspecialchars(tokenCsrf(), ENT_QUOTES, 'UTF-8') ?>">
 
                 <label for="correo">Correo electrónico</label>
@@ -98,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <button type="submit">Iniciar sesión</button>
             </form>
-            <p class="nota"><a href="registro.php">Registrar acceso</a></p>
+            <p class="nota"><a href="<?= urlPagina('registro.php') ?>">Registrar acceso</a></p>
         </section>
     </main>
 </body>

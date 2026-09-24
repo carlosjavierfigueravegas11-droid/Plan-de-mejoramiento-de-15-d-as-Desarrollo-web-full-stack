@@ -19,7 +19,8 @@ const esTablaServidor = document.body.hasAttribute("data-tabla-servidor");
 const hayTabla = Boolean(tbody && buscador) && !esTablaServidor;
 
 const sirviendoDelServidor = location.protocol.startsWith("http");
-const API = "app/rutas/productos.php";
+const BASE = (window.BASE_URL || '/');
+const API = BASE + "app/rutas/productos.php";
 const puedeEditar = document.body.hasAttribute("data-puede-editar")
   ? document.body.dataset.puedeEditar === "1"
   : true;
@@ -135,7 +136,7 @@ if (hayTabla) {
     clearTimeout(esperaBusqueda);
     esperaBusqueda = setTimeout(async () => {
       const respuesta = await fetch(
-        `app/rutas/buscar-productos.php?q=${encodeURIComponent(texto)}`,
+        BASE + `app/rutas/buscar-productos.php?q=${encodeURIComponent(texto)}`,
         { headers: { Accept: "application/json" } }
       );
       if (!respuesta.ok) return;

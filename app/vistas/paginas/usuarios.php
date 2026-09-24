@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/app/seguridad/guardia.php';
-require_once __DIR__ . '/app/config/conexion.php';
+require_once __DIR__ . '/../../../app/seguridad/guardia.php';
+require_once __DIR__ . '/../../../app/config/conexion.php';
 
 exigirRol('admin'); // solo el administrador llega aquí
 
@@ -26,8 +26,8 @@ try {
     <link rel="stylesheet" href="<?= BASE_URL ?>css/estilos.css">
 </head>
 <body class="panel">
-    <?php require __DIR__ . '/app/vistas/parciales/cabecera.php'; ?>
-    <?php require __DIR__ . '/app/vistas/parciales/menu.php'; ?>
+    <?php require __DIR__ . '/../parciales/cabecera.php'; ?>
+    <?php require __DIR__ . '/../parciales/menu.php'; ?>
 
     <main class="contenido">
         <h1>Gestión de usuarios</h1>
@@ -67,6 +67,6 @@ try {
         </section>
     </main>
 
-    <?php require __DIR__ . '/app/vistas/parciales/pie.php'; ?>
+    <?php require __DIR__ . '/../parciales/pie.php'; ?>
 </body>
 </html>

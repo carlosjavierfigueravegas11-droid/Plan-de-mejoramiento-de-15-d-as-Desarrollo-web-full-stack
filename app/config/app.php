@@ -16,6 +16,25 @@ define('BASE_URL', '/');
 define('NOMBRE_SITIO', 'ISoT — Panel de gestión');
 define('ANIO_SITIO', '2026');
 
+/**
+ * Día 15/16 — Reorden MVC: rutas públicas centralizadas.
+ * Las vistas viven en app/vistas/paginas/, la lógica en app/controladores/
+ * y las acciones POST en app/rutas/. BASE_URL es la raíz pública del sistema;
+ * estos prefijos completan las URLs que el navegador escribe.
+ */
+define('RUTA_PAGINAS', 'app/vistas/paginas/');
+define('RUTA_CONTROLADORES', 'app/controladores/');
+
+function urlPagina(string $archivo = ''): string
+{
+    return BASE_URL . RUTA_PAGINAS . $archivo;
+}
+
+function urlControlador(string $archivo = ''): string
+{
+    return BASE_URL . RUTA_CONTROLADORES . $archivo;
+}
+
 define('SOFTWARE_NOMBRE', 'ISoT');
 define('SOFTWARE_DESCRIPCION', 'Sistema de Punto de Venta y Gestión de Inventario');
 define('SOFTWARE_VERSION', '1.0');

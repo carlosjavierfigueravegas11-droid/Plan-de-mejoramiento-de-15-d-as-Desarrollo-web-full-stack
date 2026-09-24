@@ -28,6 +28,6 @@ function consumirAviso(): ?array
 /** Redirección 303 (See Other) para cerrar el ciclo POST / Redirect / GET. */
 function redirigirA(string $destino): never
 {
-    header('Location: ' . BASE_URL . $destino, true, 303);
+    header('Location: ' . urlPagina($destino), true, 303);
     exit;
 }

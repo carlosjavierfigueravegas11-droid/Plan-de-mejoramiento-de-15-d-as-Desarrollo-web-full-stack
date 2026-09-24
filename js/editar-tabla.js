@@ -22,7 +22,8 @@
     const id = Number(boton.dataset.id);
     if (!id) return;
 
-    const respuesta = await fetch(`app/rutas/producto.php?id=${id}`, {
+    const base = (window.BASE_URL || '/');
+    const respuesta = await fetch(`${base}app/rutas/producto.php?id=${id}`, {
       headers: { Accept: "application/json" }
     });
     if (!respuesta.ok) return;

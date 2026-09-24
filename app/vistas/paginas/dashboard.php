@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-include_once __DIR__ . '/app/config/app.php';
+include_once __DIR__ . '/../../../app/config/app.php';
 
-require_once __DIR__ . '/app/seguridad/guardia.php';
-require_once __DIR__ . '/app/config/conexion.php';
+require_once __DIR__ . '/../../../app/seguridad/guardia.php';
+require_once __DIR__ . '/../../../app/config/conexion.php';
 
 $pdo = Conexion::obtener();
 
@@ -34,11 +34,11 @@ $indicadores = $pdo->query($sql)->fetch();
     <link rel="stylesheet" href="<?= BASE_URL ?>css/estilos.css">
 </head>
 <body class="panel">
-    <?php require __DIR__ . '/app/vistas/parciales/cabecera.php'; ?>
-    <?php require __DIR__ . '/app/vistas/parciales/menu.php'; ?>
+    <?php require __DIR__ . '/../parciales/cabecera.php'; ?>
+    <?php require __DIR__ . '/../parciales/menu.php'; ?>
 
     <main class="contenido">
-        <?php require __DIR__ . '/app/vistas/parciales/titulo.php'; ?>
+        <?php require __DIR__ . '/../parciales/titulo.php'; ?>
 
         <section class="cabecera-tablero" aria-label="Controles del tablero">
             <div>
@@ -125,10 +125,10 @@ $indicadores = $pdo->query($sql)->fetch();
             <article class="grafico grafico--ancho" id="stock-critico-lista"></article>
         </section>
 
-        <p><a class="boton" href="<?= BASE_URL ?>productos.php">Ir al inventario</a></p>
+        <p><a class="boton" href="<?= urlPagina('productos.php') ?>">Ir al inventario</a></p>
     </main>
 
-    <?php require __DIR__ . '/app/vistas/parciales/pie.php'; ?>
+    <?php require __DIR__ . '/../parciales/pie.php'; ?>
     <span id="graficos-estado" aria-hidden="true"></span>
     <script src="<?= BASE_URL ?>js/vendor/chart.umd.min.js" defer></script>
     <script src="<?= BASE_URL ?>js/graficos.js" defer></script>

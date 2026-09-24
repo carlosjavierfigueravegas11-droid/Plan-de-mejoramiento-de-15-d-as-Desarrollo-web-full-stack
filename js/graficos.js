@@ -20,7 +20,8 @@
   }
 
   async function cargarDatos() {
-    var resp = await fetch('api/graficos.php?rango=' + rangoActivo, { credentials: 'same-origin' });
+    var base = (window.BASE_URL || '/');
+    var resp = await fetch(base + 'api/graficos.php?rango=' + rangoActivo, { credentials: 'same-origin' });
     if (!resp.ok) throw new Error('API de gráficos no disponible (' + resp.status + ')');
     return resp.json();
   }

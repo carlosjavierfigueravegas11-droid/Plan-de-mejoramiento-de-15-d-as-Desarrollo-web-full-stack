@@ -28,7 +28,7 @@ $opcionesMenu = [
                 <?php if (!puede(...$opcion['roles'])) continue; ?>
                 <?php $activo = ($paginaActual === $opcion['archivo']); ?>
                 <li>
-                    <a href="<?= BASE_URL . $opcion['archivo'] ?>"
+                    <a href="<?= urlPagina($opcion['archivo']) ?>"
                        class="<?= $activo ? 'activo' : '' ?>"
                        <?= $activo ? 'aria-current="page"' : '' ?>>
                         <?= htmlspecialchars($opcion['texto'], ENT_QUOTES, 'UTF-8') ?>

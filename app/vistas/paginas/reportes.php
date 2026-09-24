@@ -11,10 +11,10 @@ declare(strict_types=1);
  * exportación a CSV (api/exportar-csv.php) y a PDF (api/exportar-pdf.php).
  */
 
-require_once __DIR__ . '/app/seguridad/guardia.php';
-require_once __DIR__ . '/app/seguridad/csrf.php';
-require_once __DIR__ . '/app/config/conexion.php';
-require_once __DIR__ . '/app/modelos/ReporteModelo.php';
+require_once __DIR__ . '/../../../app/seguridad/guardia.php';
+require_once __DIR__ . '/../../../app/seguridad/csrf.php';
+require_once __DIR__ . '/../../../app/config/conexion.php';
+require_once __DIR__ . '/../../../app/modelos/ReporteModelo.php';
 
 if (!puede('admin', 'consultor')) {
     http_response_code(403);
@@ -80,15 +80,15 @@ try {
     <script src="<?= BASE_URL ?>js/vendor/chart.umd.min.js" defer></script>
 </head>
 <body class="panel">
-    <?php require __DIR__ . '/app/vistas/parciales/cabecera.php'; ?>
-    <?php require __DIR__ . '/app/vistas/parciales/menu.php'; ?>
+    <?php require __DIR__ . '/../parciales/cabecera.php'; ?>
+    <?php require __DIR__ . '/../parciales/menu.php'; ?>
 
     <main class="contenido">
         <h1>Reportes</h1>
 
         <!-- selector de reporte + filtros -->
         <section class="formulario reporte-toolbar" aria-label="Configurar reporte">
-            <form method="get" action="<?= BASE_URL ?>reportes.php" id="form-reportes">
+            <form method="get" action="<?= urlPagina('reportes.php') ?>" id="form-reportes">
                 <input type="hidden" name="filtro" value="1">
                 <div class="linea-pedido">
                     <label for="reporte">Reporte</label>
@@ -128,12 +128,12 @@ try {
             <?php if (!$bdDisponible): ?>
                 <p class="alerta alerta--error" role="status">Sin conexión con la base de datos.</p>
             <?php elseif ($datosReporte !== null): ?>
-                <?php require __DIR__ . '/app/vistas/reportes/encabezado.php'; ?>
+                <?php require __DIR__ . '/../reportes/encabezado.php'; ?>
 
                 <?php
                 $tipoGrafico = 'canvas';
                 $graficoDataUrl = '';
-                require __DIR__ . '/app/vistas/reportes/cuerpo.php';
+                require __DIR__ . '/../reportes/cuerpo.php';
                 ?>
 
                 <!-- exportaciones: PDF (mismo HTML, gráfico incrustado) y CSV -->
@@ -143,7 +143,7 @@ try {
                     <button type="button" class="boton" id="btn-imprimir" onclick="window.print()">Imprimir</button>
                 </div>
 
-                <?php require __DIR__ . '/app/vistas/reportes/pie.php'; ?>
+                <?php require __DIR__ . '/../reportes/pie.php'; ?>
             <?php endif; ?>
         </section>
     </main>
@@ -157,7 +157,7 @@ try {
         <input type="hidden" name="grafico" value="">
     </form>
 
-    <?php require __DIR__ . '/app/vistas/parciales/pie.php'; ?>
+    <?php require __DIR__ . '/../parciales/pie.php'; ?>
     <script src="<?= BASE_URL ?>js/reportes.js" defer></script>
 </body>
 </html>

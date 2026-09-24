@@ -1,9 +1,10 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/app/config/conexion.php';
-require_once __DIR__ . '/app/modelos/UsuarioModelo.php';
-require_once __DIR__ . '/app/seguridad/csrf.php';
+require_once __DIR__ . '/../../../app/config/app.php';
+require_once __DIR__ . '/../../../app/config/conexion.php';
+require_once __DIR__ . '/../../../app/modelos/UsuarioModelo.php';
+require_once __DIR__ . '/../../../app/seguridad/csrf.php';
 
 session_start();
 
@@ -49,13 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registro — ISoT</title>
-    <link rel="stylesheet" href="css/tokens.css">
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/tokens.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/estilos.css">
 </head>
 <body>
     <main class="pantalla-ingreso">
         <section class="marca">
-            <img src="assets/img/logo.svg" alt="Logo de ISoT" width="200">
+            <img src="<?= BASE_URL ?>assets/img/logo.svg" alt="Logo de ISoT" width="200">
             <h1>Panel de gestión</h1>
             <p>Crea un acceso para el equipo del programa.</p>
         </section>
@@ -73,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?= htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') ?>.
                 </p>
             <?php endif; ?>
-            <form method="post" action="registro.php" novalidate>
+            <form method="post" action="<?= urlPagina('registro.php') ?>" novalidate>
                 <input type="hidden" name="csrf" value="<?= htmlspecialchars(tokenCsrf(), ENT_QUOTES, 'UTF-8') ?>">
 
                 <label for="nombre">Nombre completo</label>
@@ -96,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <button type="submit">Registrar</button>
             </form>
-            <p class="nota"><a href="login.php">Ya tengo acceso</a></p>
+            <p class="nota"><a href="<?= urlPagina('login.php') ?>">Ya tengo acceso</a></p>
         </section>
     </main>
 </body>
